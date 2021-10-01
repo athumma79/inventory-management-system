@@ -1,1 +1,118 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+}
+
+app-root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    background-color: #73d6d1;
+}
+
+h1 {
+    text-align: center;
+}
+
+header h1 {
+    font-size: 3em;
+}
+
+@media (max-width: 650px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+}
+
+@media (max-width: 543px) {
+    header h1 {
+        font-size: 2em;
+    }
+}
+
+.container-fluid {
+    flex-grow: 1;
+}
+
+.container-fluid h1 {
+    line-height: inherit;
+}
+
+#table-controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+#pagination {
+    margin-bottom: 5px;
+}
+
+#searchbar {
+    width: 250px;
+    margin-bottom: 5px;
+}
+
+#pagination button,
+#searchbar button {
+    width: 50px;
+}
+
+table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+th div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sort-by-header {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+}
+
+.sort-by-cell {
+    background-color: #f8f9fa;
+}
+
+tr {
+    height: 50px;
+}
+
+.button-cell {
+    border: none !important;
+    padding: 0 0 0 10px !important;
+}
+
+#add-row-btn,
+.delete-btn {
+    width: 100%;
+}
+
+.button-container {
+    text-align: center;
+}
+
+#edit-btn,
+#done-btn {
+    width: 200px;
+    margin-bottom: 15px;
+}
+
+footer {
+    flex-shrink: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #73d6d1;
+}
