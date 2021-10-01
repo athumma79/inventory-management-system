@@ -1,3 +1,5 @@
+/* @import "~bootstrap/dist/js/bootstrap.min.js"; */
+
 html, body {
     height: 100%;
 }
@@ -70,6 +72,10 @@ table {
     border-collapse: collapse !important;
 }
 
+tr {
+    height: 50px;
+}
+
 th div {
     display: flex;
     justify-content: space-between;
@@ -86,8 +92,8 @@ th div {
     background-color: #f8f9fa;
 }
 
-tr {
-    height: 50px;
+tr.hover:hover td.sort-by-cell {
+    background-color: #e3e6ea;
 }
 
 .button-cell {
