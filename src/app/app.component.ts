@@ -106,7 +106,7 @@ export class AppComponent {
         addUpdateCellHandlers();
         addRowDetailsHandlers();
         adjustHoverEffect();
-        if (sortByColumnNumber) {
+        if (sortByColumnNumber != null) {
           highlightSortByColumn(sortByColumnNumber);
         }
       }
