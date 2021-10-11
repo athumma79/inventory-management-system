@@ -5,6 +5,8 @@ import * as $ from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
 import { CarDetailsComponent } from './car-details/car-details.component';
 
+import { Car } from './models/car';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,78 +19,68 @@ export class AppComponent {
   ngOnInit() {
     let _this = this;
     $(function() {
-      let inventoryData: { 
-                            vin: string | null,
-                            brand: string | null,
-                            model: string | null,
-                            color: string | null,
-                            year: number | null,
-                            mileage: number | null,
-                            price: number | null,
-                            quantity: number | null,
-                            image: string | null
-                        }[] = 
-      [
-        { 
-          vin: "KNAFB1217Y5836917",
-          brand: "Acura",
-          model: "MDX",
-          color: "White",
-          year: 2008,
-          mileage: 65390,
-          price: 7495,
-          quantity: 1,
-          image: "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg"
-        },
-        { 
-          vin: "JN8AZ2NF7C9539531",
-          brand: "Audi",
-          model: "A6",
-          color: "Red",
-          year: 2018,
-          mileage: 25185,
-          price: 39990,
-          quantity: 2,
-          image: "https://cdn.pocket-lint.com/r/s/1200x/assets/images/146601-cars-review-audi-a6-avant-exterior-image1-knrtkean17.jpg"
-        },
-        { 
-          vin: "2HGEJ1125RH504045",
-          brand: "Tesla",
-          model: "Model 3",
-          color: "Black",
-          year: 2019,
-          mileage: 13200,
-          price: 44998,
-          quantity: 4,
-          image: "https://blog.vipautoaccessories.com/wp-content/uploads/2020/10/hero-1.jpg"
-        },
-        { 
-          vin: "1N4AL2EP8DC214483",
-          brand: "Honda",
-          model: "Civic",
-          color: "Blue",
-          year: 2005,
-          mileage: 95230,
-          price: 5763,
-          quantity: 2,
-          image: "https://blogmedia.dealerfire.com/wp-content/uploads/sites/749/2018/10/2019-Honda-Civic-Coupe-Aegean-Blue-Metallic_o.jpeg"
-        },
-        { 
-          vin: "1GC1KYE80EF172707",
-          brand: "Toyota",
-          model: "Corolla",
-          color: "Green",
-          year: 2013,
-          mileage: 30195,
-          price: 12990,
-          quantity: 1,
-          image: "https://img2.carmax.com/img/vehicles/21050064/1_cleaned.jpg?width=800"
-        }
-      ];
+      let inventoryData: Car[] = new Array();
       let sortByColumnNumber: number;
-      
+
+      populateInventoryData();
       loadHeadingIds();
       generateTable();
+      
+      function populateInventoryData() {
+        for (let i = 0; i < 5; i++) {
+          inventoryData.push(new Car());
+        }
+
+        inventoryData[0].vin = "KNAFB1217Y5836917";
+        inventoryData[0].brand = "Acura";
+        inventoryData[0].model = "MDX";
+        inventoryData[0].color = "White";
+        inventoryData[0].year = 2008;
+        inventoryData[0].mileage = 65390;
+        inventoryData[0].price = 7495;
+        inventoryData[0].quantity = 1;
+        inventoryData[0].image = "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg";
+
+        inventoryData[1].vin = "JN8AZ2NF7C9539531";
+        inventoryData[1].brand = "Audi";
+        inventoryData[1].model = "A6";
+        inventoryData[1].color = "Red";
+        inventoryData[1].year = 2018;
+        inventoryData[1].mileage = 25185;
+        inventoryData[1].price = 39990;
+        inventoryData[1].quantity = 2;
+        inventoryData[1].image = "https://cdn.pocket-lint.com/r/s/1200x/assets/images/146601-cars-review-audi-a6-avant-exterior-image1-knrtkean17.jpg";
+
+        inventoryData[2].vin = "2HGEJ1125RH504045";
+        inventoryData[2].brand = "Tesla";
+        inventoryData[2].model = "Model 3";
+        inventoryData[2].color = "Black";
+        inventoryData[2].year = 2019;
+        inventoryData[2].mileage = 13200;
+        inventoryData[2].price = 44998;
+        inventoryData[2].quantity = 4;
+        inventoryData[2].image = "https://blog.vipautoaccessories.com/wp-content/uploads/2020/10/hero-1.jpg";
+
+        inventoryData[3].vin = "1N4AL2EP8DC214483";
+        inventoryData[3].brand = "Honda";
+        inventoryData[3].model = "Civic";
+        inventoryData[3].color = "Blue";
+        inventoryData[3].year = 2005;
+        inventoryData[3].mileage = 95230;
+        inventoryData[3].price = 5763;
+        inventoryData[3].quantity = 2;
+        inventoryData[3].image = "https://blogmedia.dealerfire.com/wp-content/uploads/sites/749/2018/10/2019-Honda-Civic-Coupe-Aegean-Blue-Metallic_o.jpeg";
+
+        inventoryData[4].vin = "1GC1KYE80EF172707";
+        inventoryData[4].brand = "Toyota";
+        inventoryData[4].model = "Corolla";
+        inventoryData[4].color = "Green";
+        inventoryData[4].year = 2013;
+        inventoryData[4].mileage = 30195;
+        inventoryData[4].price = 12990;
+        inventoryData[4].quantity = 1;
+        inventoryData[4].image = "https://img2.carmax.com/img/vehicles/21050064/1_cleaned.jpg?width=800";
+      }
   
       function loadHeadingIds() {
         let headings = document.querySelectorAll("th");
@@ -247,7 +239,7 @@ export class AppComponent {
       }
   
       $("#add-row-btn").click(function() {
-        inventoryData.push(Object());
+        inventoryData.push(new Car());
         generateTable();
       });
   
