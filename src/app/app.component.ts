@@ -17,7 +17,7 @@ export class AppComponent {
   inventoryData: Car[] = new Array();
   sortByColumnNumber: number | null = null;
   currentPage: number = 1;
-  entriesPerPage: number = 3;
+  rowsPerPage: number = 3;
 
   constructor(public dialog: MatDialog, private ngZone: NgZone) {}
 
@@ -100,8 +100,8 @@ export class AppComponent {
       });
 
       $("#rows-per-page-field")
-        .change(() => _this.entriesPerPageInputHandler())
-        .keyup(() => _this.entriesPerPageInputHandler());
+        .change(() => _this.rowsPerPageInputHandler())
+        .keyup(() => _this.rowsPerPageInputHandler());
     });
   }
 
@@ -409,6 +409,7 @@ export class AppComponent {
 
   updatePagination() {
     $("#current-page").text(this.currentPage);
+    $("#rows-per-page-field").val(this.rowsPerPage);
     $("#prev-page-btn").removeAttr("disabled");
     $("#next-page-btn").removeAttr("disabled");
     if (this.isPageOnBottomEdgeOfBounds()) {
@@ -435,28 +436,28 @@ export class AppComponent {
     }
   }
 
-  entriesPerPageInputHandler() {
+  rowsPerPageInputHandler() {
     let input = $("#rows-per-page-field").val();
     if (input) {
-      this.entriesPerPage = Number(input);
+      this.rowsPerPage = Number(input);
       this.generateTable();
     }
   }
 
   goToLastPage() {
-    this.currentPage = Math.ceil(this.getEnabledInventoryCount() / this.entriesPerPage);
+    this.currentPage = Math.ceil(this.getEnabledInventoryCount() / this.rowsPerPage);
   }
 
   isPageEmpty() {
-    return this.currentPage > Math.ceil(this.getEnabledInventoryCount() / this.entriesPerPage);
+    return this.currentPage > Math.ceil(this.getEnabledInventoryCount() / this.rowsPerPage);
   }
 
   getFirstItemOnPage() {
-    return (this.currentPage - 1) * this.entriesPerPage;
+    return (this.currentPage - 1) * this.rowsPerPage;
   }
 
   getLastItemOnPage() {
-    return this.getFirstItemOnPage() + this.entriesPerPage - 1;
+    return this.getFirstItemOnPage() + this.rowsPerPage - 1;
   }
 
   isPageOnBottomEdgeOfBounds() {
