@@ -46,25 +46,7 @@ header h1 {
     line-height: inherit;
 }
 
-#table-controls {
-    display: flex;
-    justify-content: space-between;
-}
-
-#pagination {
-    margin-bottom: 5px;
-}
-
-#current-page {
-    color: black;
-    background-color: transparent;
-    border: 1px solid #ced4da;
-    border-left: none;
-    border-right: none;
-}
-
 #searchbar {
-    width: 250px;
     margin-bottom: 5px;
 }
 
@@ -83,9 +65,12 @@ header h1 {
     color: #9da2a783;
 }
 
-#pagination button,
 #search-btn {
     width: 50px;
+}
+
+table {
+    margin-bottom: 0 !important;
 }
 
 tr {
@@ -123,6 +108,25 @@ tr.hover:hover td.sort-by-cell {
     width: 100%;
 }
 
+#table-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#pagination button {
+    width: 50px;
+}
+
+#current-page {
+    color: black;
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-right: none;
+}
+
 .button-container {
     text-align: center;
 }
@@ -130,7 +134,19 @@ tr.hover:hover td.sort-by-cell {
 #edit-btn,
 #done-btn {
     width: 200px;
-    margin-bottom: 15px;
+}
+
+#rows-per-page {
+    text-align: right;
+}
+
+#rows-per-page label {
+    margin-right: 5px;
+}
+
+#rows-per-page-field {
+    display: inline-block;
+    width: 100px;
 }
 
 footer {

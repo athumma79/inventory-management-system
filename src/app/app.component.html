@@ -3,26 +3,15 @@
 </header>
 <div class="container-fluid">
   <h1>Car Inventory</h1>
-  <div id="table-controls">
-    <div class="btn-group" id="pagination">
-      <button type="button" class="btn btn-primary" id="prev-page-btn">
-        <i class="far fa-chevron-left"></i>
+  <div class="input-group" id="searchbar">
+    <input type="search" class="form-control" id="searchbar-field"/>
+    <div class="input-group-append">
+      <button type="button" class="btn" id="clear-search-btn">
+        <i class="fad fa-times-circle"></i>
       </button>
-      <button type="button" class="btn" id="current-page" disabled></button>
-      <button type="button" class="btn btn-primary" id="next-page-btn">
-        <i class="far fa-chevron-right"></i>
+      <button type="button" class="btn btn-primary" id="search-btn">
+        <i class="far fa-search"></i>
       </button>
-    </div>
-    <div class="input-group" id="searchbar">
-      <input type="search" class="form-control" id="searchbar-field"/>
-      <div class="input-group-append">
-        <button type="button" class="btn" id="clear-search-btn">
-          <i class="fad fa-times-circle"></i>
-        </button>
-        <button type="button" class="btn btn-primary" id="search-btn">
-          <i class="far fa-search"></i>
-        </button>
-      </div>
     </div>
   </div>
   <div class="table-responsive">
@@ -71,9 +60,24 @@
       <tbody></tbody>
     </table>
   </div>
-  <div class="button-container">
-    <button class="btn btn-primary" id="edit-btn">Edit</button>
-    <button class="btn btn-primary d-none" id="done-btn">Done</button>
+  <div id="table-controls">
+    <div class="btn-group" id="pagination">
+      <button type="button" class="btn btn-primary" id="prev-page-btn">
+        <i class="far fa-chevron-left"></i>
+      </button>
+      <button type="button" class="btn" id="current-page" disabled></button>
+      <button type="button" class="btn btn-primary" id="next-page-btn">
+        <i class="far fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="button-container">
+      <button class="btn btn-primary" id="edit-btn">Edit</button>
+      <button class="btn btn-primary d-none" id="done-btn">Done</button>
+    </div>
+    <div id="rows-per-page">
+      <label>Rows per page:</label>
+      <input type="number" min="1" class="form-control" id="rows-per-page-field"/>
+    </div>
   </div>
 </div>
 <footer></footer>

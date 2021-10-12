@@ -98,6 +98,10 @@ export class AppComponent {
           _this.generateTable();
         }
       });
+
+      $("#rows-per-page-field")
+        .change(() => _this.entriesPerPageInputHandler())
+        .keyup(() => _this.entriesPerPageInputHandler());
     });
   }
 
@@ -431,14 +435,12 @@ export class AppComponent {
     }
   }
 
-  getEnabledInventoryCount() {
-    let count = 0;
-    for (let i = 0; i < this.inventoryData.length; i++) {
-      if (this.inventoryData[i].toDisplaySearch) {
-        count++;
-      }
+  entriesPerPageInputHandler() {
+    let input = $("#rows-per-page-field").val();
+    if (input) {
+      this.entriesPerPage = Number(input);
+      this.generateTable();
     }
-    return count;
   }
 
   goToLastPage() {
@@ -463,6 +465,16 @@ export class AppComponent {
 
   isPageOnTopEdgeOfBounds() {
     return this.getLastItemOnPage() >= (this.getEnabledInventoryCount() - 1);
+  }
+
+  getEnabledInventoryCount() {
+    let count = 0;
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (this.inventoryData[i].toDisplaySearch) {
+        count++;
+      }
+    }
+    return count;
   }
 
   adjustHoverEffect() {
