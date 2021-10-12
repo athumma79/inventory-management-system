@@ -16,6 +16,8 @@ export class AppComponent {
 
   inventoryData: Car[] = new Array();
   sortByColumnNumber: number | null = null;
+  currentPage: number = 1;
+  entriesPerPage: number = 3;
 
   constructor(public dialog: MatDialog, private ngZone: NgZone) {}
 
@@ -29,6 +31,7 @@ export class AppComponent {
 
       $("#add-row-btn").click(function() {
         _this.inventoryData.push(new Car());
+        _this.goToLastPage();
         _this.generateTable();
       });
 
@@ -69,6 +72,31 @@ export class AppComponent {
         _this.toggleSortIcon(this);
         _this.sort(_this.sortByColumnNumber, isAscending);
         _this.generateTable();
+      });
+
+      $("#search-btn").click(function() {
+        _this.setRowVisibilityBySearch($("#searchbar-field").val() as string);
+        _this.generateTable();
+      });
+
+      $("#clear-search-btn").click(function() {
+        $("#searchbar-field").val("");
+        _this.setAllRowsToSearchVisible();
+        _this.generateTable();
+      });
+
+      $("#next-page-btn").click(function() {
+        if (!_this.isPageOnTopEdgeOfBounds()) {
+          _this.currentPage++;
+          _this.generateTable();
+        }
+      });
+
+      $("#prev-page-btn").click(function() {
+        if (!_this.isPageOnBottomEdgeOfBounds()) {
+          _this.currentPage--;
+          _this.generateTable();
+        }
       });
     });
   }
@@ -137,32 +165,33 @@ export class AppComponent {
   }
 
   generateTable() {
-    let _this = this;
+    this.updatePagination();
     $("tbody").html('');
-    for (let i = 0; i < _this.inventoryData.length; i++) {
-      $("tbody").append(_this.generateRow(_this.inventoryData[i]));
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (this.inventoryData[i].toDisplaySearch && this.inventoryData[i].toDisplayPage) {
+        $("tbody").append(this.generateRow(this.inventoryData[i]));
+      }
     }
-    _this.addDeleteButtonHandlers();
-    _this.addUpdateCellHandlers();
-    _this.addRowDetailsHandlers();
-    _this.adjustHoverEffect();
-    if (_this.sortByColumnNumber != null) {
-      _this.highlightSortByColumn(_this.sortByColumnNumber);
+    this.addDeleteButtonHandlers();
+    this.addUpdateCellHandlers();
+    this.addRowDetailsHandlers();
+    this.adjustHoverEffect();
+    if (this.sortByColumnNumber != null) {
+      this.highlightSortByColumn(this.sortByColumnNumber);
     }
   }
 
   generateRow(data: any) {
-    let _this = this;
     let row = '<tr>';
     for (let i = 0; i < document.querySelectorAll("th").length; i++) {
       row += '<td class="column-data-' + i + ' align-middle"';
-      row += _this.isEditable() ? ' contenteditable="true"' : '';
+      row += this.isEditable() ? ' contenteditable="true"' : '';
       row += '>';
-      row += _this.generateCellContents(data, i);
+      row += this.generateCellContents(data, i);
       row += '</td>';
     }
     row += '<td class="button-cell align-middle'
-    row += _this.isEditable() ? '" contenteditable="false"' : ' d-none"';
+    row += this.isEditable() ? '" contenteditable="false"' : ' d-none"';
     row += '>';
     row += '<button class="btn btn-danger delete-btn"> \
               <i class="fas fa-trash"></i> \
@@ -188,8 +217,8 @@ export class AppComponent {
   }
 
   addRowDetailsHandlers() {
-    let _this = this;
-    if (!_this.isEditable()) {
+    if (!this.isEditable()) {
+      let _this = this;
       $("tbody tr").off("click").click(function() {
         let rowNumber = $(this).parent().children().index($(this));
         _this.ngZone.run(() => {
@@ -203,11 +232,11 @@ export class AppComponent {
   }
 
   addUpdateCellHandlers() {
-    let _this = this;
     let originalCellContent: string;
     $("td").focus(function() {
       originalCellContent = $(this).text();
     });
+    let _this = this;
     $("td").blur(function() {
       let rowNumber = $(this).parent().parent().children().index($(this).parent());
       let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
@@ -283,6 +312,9 @@ export class AppComponent {
     $(".delete-btn").off("click").click(function() {
       let rowNumber = $(this).parent().parent().parent().children().index($(this).parent().parent());
       _this.inventoryData.splice(rowNumber, 1);
+      if (_this.isPageEmpty() && _this.currentPage > 1) {
+        !_this.currentPage--;
+      }
       _this.generateTable();
     });
   }
@@ -313,12 +345,12 @@ export class AppComponent {
       case 7: curr = curr.quantity; next = next.quantity; break;
     }
     if (columnNumber < 4) {
-      curr = curr ? curr.toLowerCase() : 0;
-      next = next ? next.toLowerCase() : 0;
+      curr = curr ? curr.toLowerCase() : NaN;
+      next = next ? next.toLowerCase() : NaN;
     }
     else {
-      curr = Number(curr);
-      next = Number(next);
+      curr = curr ? Number(curr) : NaN;
+      next = next ? Number(next) : NaN;
     }
     return ascending ? curr > next : curr < next;
   }
@@ -353,9 +385,88 @@ export class AppComponent {
     }
   }
 
+  setRowVisibilityBySearch(searchValue: string) {
+    this.setAllRowsToSearchVisible();
+    if (searchValue.trim().length == 0) {
+      return;
+    }
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (!this.inventoryData[i].contains(searchValue)) {
+        this.inventoryData[i].toDisplaySearch = false;
+      }
+    }
+  }
+
+  setAllRowsToSearchVisible() {
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      this.inventoryData[i].toDisplaySearch = true;
+    }
+  }
+
+  updatePagination() {
+    $("#current-page").text(this.currentPage);
+    $("#prev-page-btn").removeAttr("disabled");
+    $("#next-page-btn").removeAttr("disabled");
+    if (this.isPageOnBottomEdgeOfBounds()) {
+      $("#prev-page-btn").attr("disabled", "disabled");
+    }
+    if (this.isPageOnTopEdgeOfBounds()) {
+      $("#next-page-btn").attr("disabled", "disabled");
+    }
+    this.setRowVisibilityByPage();
+  }
+
+  setRowVisibilityByPage() {
+    this.setAllRowsToPageVisible();
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (i < this.getFirstItemOnPage() || i > this.getLastItemOnPage()) {
+        this.inventoryData[i].toDisplayPage = false;
+      }
+    }
+  }
+
+  setAllRowsToPageVisible() {
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      this.inventoryData[i].toDisplayPage = true;
+    }
+  }
+
+  getEnabledInventoryCount() {
+    let count = 0;
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (this.inventoryData[i].toDisplaySearch) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  goToLastPage() {
+    this.currentPage = Math.ceil(this.getEnabledInventoryCount() / this.entriesPerPage);
+  }
+
+  isPageEmpty() {
+    return this.currentPage > Math.ceil(this.getEnabledInventoryCount() / this.entriesPerPage);
+  }
+
+  getFirstItemOnPage() {
+    return (this.currentPage - 1) * this.entriesPerPage;
+  }
+
+  getLastItemOnPage() {
+    return this.getFirstItemOnPage() + this.entriesPerPage - 1;
+  }
+
+  isPageOnBottomEdgeOfBounds() {
+    return this.currentPage <= 1;
+  }
+
+  isPageOnTopEdgeOfBounds() {
+    return this.getLastItemOnPage() >= (this.getEnabledInventoryCount() - 1);
+  }
+
   adjustHoverEffect() {
-    let _this = this;
-    _this.isEditable() ? $("tbody tr").removeClass("hover") : $("tbody tr").addClass("hover");
+    this.isEditable() ? $("tbody tr").removeClass("hover") : $("tbody tr").addClass("hover");
   }
 
   isEditable() {
