@@ -5,6 +5,7 @@ import * as $ from 'jquery';
 
 import { MatDialog } from '@angular/material/dialog';
 import { CarDetailsComponent } from './car-details/car-details.component';
+import { InvalidInputAlertComponent } from './invalid-input-alert/invalid-input-alert.component';
 
 import { Car } from './models/car';
 
@@ -222,9 +223,9 @@ export class AppComponent {
       let cellContent = $(this).text();
       if (!_this.validateInput(cellContent, Number(columnNumber))) {
         $(this).text(originalCellContent);
-        alert("Invalid input.");
+        _this.openInvalidInputAlert();
         return;
-      }
+      } 
       _this.updateInventoryData(rowNumber, Number(columnNumber), cellContent);
       _this.formatNumbersOnUpdate(rowNumber, Number(columnNumber), this)
     });
@@ -244,6 +245,15 @@ export class AppComponent {
       case 6: regex = /^(\$?(\d+|\d{1,3}(,\d{3})*)(\.\d{2})?)$/; break;
     }
     return regex?.test(value);
+  }
+
+  openInvalidInputAlert() {
+    this.ngZone.run(() => {
+      this.dialog.open(InvalidInputAlertComponent, {
+        width: '325px',
+        height: '175px'
+      });
+    });
   }
 
   updateInventoryData(rowNumber: number, columnNumber: number, cellContent: string) {

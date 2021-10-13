@@ -6,11 +6,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { CarDetailsComponent } from './car-details/car-details.component';
+import { InvalidInputAlertComponent } from './invalid-input-alert/invalid-input-alert.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarDetailsComponent
+    CarDetailsComponent,
+    InvalidInputAlertComponent
   ],
   imports: [
     BrowserModule,
