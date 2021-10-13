@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 import * as $ from 'jquery';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +20,11 @@ export class AppComponent {
   currentPage: number = 1;
   rowsPerPage: number = 3;
 
-  constructor(public dialog: MatDialog, private ngZone: NgZone) {}
+  constructor(
+    private httpClient: HttpClient, 
+    public dialog: MatDialog, 
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit() {
     this.populateInventoryData();
@@ -109,59 +114,23 @@ export class AppComponent {
   }
 
   populateInventoryData() {
-    for (let i = 0; i < 5; i++) {
-      this.inventoryData.push(new Car());
-    }
-
-    this.inventoryData[0].vin = "KNAFB1217Y5836917";
-    this.inventoryData[0].brand = "Acura";
-    this.inventoryData[0].model = "MDX";
-    this.inventoryData[0].color = "White";
-    this.inventoryData[0].year = 2008;
-    this.inventoryData[0].mileage = 65390;
-    this.inventoryData[0].price = 7495;
-    this.inventoryData[0].quantity = 1;
-    this.inventoryData[0].image = "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg";
-
-    this.inventoryData[1].vin = "JN8AZ2NF7C9539531";
-    this.inventoryData[1].brand = "Audi";
-    this.inventoryData[1].model = "A6";
-    this.inventoryData[1].color = "Red";
-    this.inventoryData[1].year = 2018;
-    this.inventoryData[1].mileage = 25185;
-    this.inventoryData[1].price = 39990;
-    this.inventoryData[1].quantity = 2;
-    this.inventoryData[1].image = "https://cdn.pocket-lint.com/r/s/1200x/assets/images/146601-cars-review-audi-a6-avant-exterior-image1-knrtkean17.jpg";
-
-    this.inventoryData[2].vin = "2HGEJ1125RH504045";
-    this.inventoryData[2].brand = "Tesla";
-    this.inventoryData[2].model = "Model 3";
-    this.inventoryData[2].color = "Black";
-    this.inventoryData[2].year = 2019;
-    this.inventoryData[2].mileage = 13200;
-    this.inventoryData[2].price = 44998;
-    this.inventoryData[2].quantity = 4;
-    this.inventoryData[2].image = "https://blog.vipautoaccessories.com/wp-content/uploads/2020/10/hero-1.jpg";
-
-    this.inventoryData[3].vin = "1N4AL2EP8DC214483";
-    this.inventoryData[3].brand = "Honda";
-    this.inventoryData[3].model = "Civic";
-    this.inventoryData[3].color = "Blue";
-    this.inventoryData[3].year = 2005;
-    this.inventoryData[3].mileage = 95230;
-    this.inventoryData[3].price = 5763;
-    this.inventoryData[3].quantity = 2;
-    this.inventoryData[3].image = "https://blogmedia.dealerfire.com/wp-content/uploads/sites/749/2018/10/2019-Honda-Civic-Coupe-Aegean-Blue-Metallic_o.jpeg";
-
-    this.inventoryData[4].vin = "1GC1KYE80EF172707";
-    this.inventoryData[4].brand = "Toyota";
-    this.inventoryData[4].model = "Corolla";
-    this.inventoryData[4].color = "Green";
-    this.inventoryData[4].year = 2013;
-    this.inventoryData[4].mileage = 30195;
-    this.inventoryData[4].price = 12990;
-    this.inventoryData[4].quantity = 1;
-    this.inventoryData[4].image = "https://img2.carmax.com/img/vehicles/21050064/1_cleaned.jpg?width=800";
+    this.httpClient.get("assets/dummy-data.json").subscribe((data: any) => {
+      for (let i = 0; i < data.cars.length; i++) {
+        let newCar = new Car();
+  
+        newCar.vin = data.cars[i].vin;
+        newCar.brand = data.cars[i].brand;
+        newCar.model = data.cars[i].model;
+        newCar.color = data.cars[i].color;
+        newCar.year = Number(data.cars[i].year);
+        newCar.mileage = Number(data.cars[i].mileage);
+        newCar.price = Number(data.cars[i].price);
+        newCar.quantity = Number(data.cars[i].quantity);
+        newCar.image = data.cars[i].image;
+  
+        this.inventoryData.push(newCar);
+      }
+    })
   }
 
   loadHeadingIds() {

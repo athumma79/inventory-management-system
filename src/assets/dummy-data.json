@@ -1,0 +1,59 @@
+{
+    "cars": [
+        {
+            "vin": "KNAFB1217Y5836917",
+            "brand": "Acura",
+            "model": "MDX",
+            "color": "White",
+            "year": "2008",
+            "mileage": "65390",
+            "price": "7495",
+            "quantity": "1",
+            "image": "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg"
+        },
+        {
+            "vin": "JN8AZ2NF7C9539531",
+            "brand": "Audi",
+            "model": "A6",
+            "color": "Red",
+            "year": "2018",
+            "mileage": "25185",
+            "price": "39990",
+            "quantity": "2",
+            "image": "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg"
+        },
+        {
+            "vin": "2HGEJ1125RH504045",
+            "brand": "Tesla",
+            "model": "Model 3",
+            "color": "Black",
+            "year": "2019",
+            "mileage": "13200",
+            "price": "44998",
+            "quantity": "4",
+            "image": "https://blog.vipautoaccessories.com/wp-content/uploads/2020/10/hero-1.jpg"
+        },
+        {
+            "vin": "1N4AL2EP8DC214483",
+            "brand": "Honda",
+            "model": "Civic",
+            "color": "Blue",
+            "year": "2005",
+            "mileage": "95230",
+            "price": "5763",
+            "quantity": "2",
+            "image": "https://blogmedia.dealerfire.com/wp-content/uploads/sites/749/2018/10/2019-Honda-Civic-Coupe-Aegean-Blue-Metallic_o.jpeg"
+        },
+        {
+            "vin": "1GC1KYE80EF172707",
+            "brand": "Toyota",
+            "model": "Corolla",
+            "color": "Green",
+            "year": "2013",
+            "mileage": "30195",
+            "price": "12990",
+            "quantity": "1",
+            "image": "https://img2.carmax.com/img/vehicles/21050064/1_cleaned.jpg?width=800"
+        }
+    ]
+}
