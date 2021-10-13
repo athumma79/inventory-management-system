@@ -18,7 +18,7 @@ export class AppComponent {
   inventoryData: Car[] = new Array();
   sortByColumnNumber: number | null = null;
   currentPage: number = 1;
-  rowsPerPage: number = 3;
+  rowsPerPage: number = 5;
 
   constructor(
     private httpClient: HttpClient, 
