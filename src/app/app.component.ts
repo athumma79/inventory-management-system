@@ -229,9 +229,12 @@ export class AppComponent {
       $("tbody tr").off("click").click(function() {
         let rowNumber = $(this).parent().children().index($(this));
         _this.ngZone.run(() => {
-          _this.dialog.open(CarDetailsComponent, {
+          let dialogRef = _this.dialog.open(CarDetailsComponent, {
             data: { image: _this.inventoryData[rowNumber].image },
             width: '50%'
+          });
+          dialogRef.afterClosed().subscribe((image) => {
+            _this.inventoryData[rowNumber].image = image;
           });
         });
       })
