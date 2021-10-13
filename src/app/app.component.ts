@@ -307,10 +307,10 @@ export class AppComponent {
     });
   }
 
-  sort(columnNumber: number, ascending: boolean) {
+  sort(columnNumber: number, isAscending: boolean) {
     for (let i = 0; i < this.inventoryData.length - 1; i++) {
       for (let j = 0; j < this.inventoryData.length - i - 1; j++) {
-        if (this.shouldSwap(j, columnNumber, ascending)) {
+        if (this.shouldSwap(j, columnNumber, isAscending)) {
           let temp = this.inventoryData[j];
           this.inventoryData[j] = this.inventoryData[j + 1];
           this.inventoryData[j + 1] = temp;
@@ -319,7 +319,7 @@ export class AppComponent {
     }
   }
 
-  shouldSwap(index: number, columnNumber: number, ascending: boolean) {
+  shouldSwap(index: number, columnNumber: number, isAscending: boolean) {
     let curr: any = this.inventoryData[index];
     let next: any = this.inventoryData[index + 1];
     switch (columnNumber) {
@@ -333,14 +333,18 @@ export class AppComponent {
       case 7: curr = curr.quantity; next = next.quantity; break;
     }
     if (columnNumber < 4) {
-      curr = curr ? curr.toLowerCase() : NaN;
-      next = next ? next.toLowerCase() : NaN;
+      curr = curr ? curr.toLowerCase() : this.subInfinityForBlanksInSort(isAscending);
+      next = next ? next.toLowerCase() : this.subInfinityForBlanksInSort(isAscending);
     }
     else {
-      curr = curr ? Number(curr) : NaN;
-      next = next ? Number(next) : NaN;
+      curr = curr ? Number(curr) : this.subInfinityForBlanksInSort(isAscending);
+      next = next ? Number(next) : this.subInfinityForBlanksInSort(isAscending);
     }
-    return ascending ? curr > next : curr < next;
+    return isAscending ? curr > next : curr < next;
+  }
+
+  subInfinityForBlanksInSort(isAscending: boolean) {
+    return isAscending ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
   }
 
   highlightSortByColumn(columnNumber: number) {
