@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ImageURLPromptComponent } from '../image-url-prompt/image-url-prompt.component';
 
 @Component({
   selector: 'app-car-details',
@@ -12,19 +13,26 @@ export class CarDetailsComponent implements OnInit {
   defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<CarDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { image: string }
   ) {
     this.image = data.image ? data.image : this.defaultImage;
     dialogRef.beforeClosed().subscribe(() => {
-      dialogRef.close((this.image != this.defaultImage) ? this.image : "");
+      dialogRef.close(this.getImageToPass());
     });
   }
 
   ngOnInit(): void {}
 
   editImage() {
-    this.setImage(prompt("Enter Image URL:") as string);
+    let dialogRef = this.dialog.open(ImageURLPromptComponent, {
+      data: { image: this.getImageToPass() },
+      width: '450px'
+    });
+    dialogRef.afterClosed().subscribe((url) => {
+      this.setImage(url);
+    });
   }
 
   deleteImage() {
@@ -46,6 +54,10 @@ export class CarDetailsComponent implements OnInit {
       callback(false);
     }
     image.src = url;
+  }
+
+  getImageToPass() {
+    return (this.image != this.defaultImage) ? this.image : "";
   }
 
 }
