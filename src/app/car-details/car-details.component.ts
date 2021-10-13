@@ -8,9 +8,20 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CarDetailsComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { image: string }) {}
+  image: string;
+  defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
 
-  ngOnInit(): void {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { image: string }) {
+    this.image = data.image ? data.image : this.defaultImage;
+  }
+
+  ngOnInit(): void {}
+
+  editImage() {
+
+  }
+
+  deleteImage() {
 
   }
 

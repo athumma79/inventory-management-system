@@ -5,13 +5,13 @@
     </button>
 </div>
 <div class="modal-body">
-    <img src={{data.image}}/>
+    <img src={{image}}/>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success">
+    <button type="button" class="btn btn-success" (click)="editImage()">
         <i class="far fa-edit"></i>
     </button>
-    <button type="button" class="btn btn-danger">
+    <button type="button" class="btn btn-danger" (click)="deleteImage()">
         <i class="fas fa-trash"></i>
     </button>
 </div>

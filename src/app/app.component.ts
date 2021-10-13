@@ -74,10 +74,13 @@ export class AppComponent {
         _this.generateTable();
       });
 
-      $("#search-btn").click(function() {
-        _this.setRowVisibilityBySearch($("#searchbar-field").val() as string);
-        _this.generateTable();
-      });
+      $("#searchbar-field").keyup((event) => {
+        if(event.key == "Enter") {
+          _this.searchInputHandler();
+        }
+      })
+
+      $("#search-btn").click(() => _this.searchInputHandler());
 
       $("#clear-search-btn").click(function() {
         $("#searchbar-field").val("");
@@ -317,7 +320,7 @@ export class AppComponent {
       let rowNumber = $(this).parent().parent().parent().children().index($(this).parent().parent());
       _this.inventoryData.splice(rowNumber, 1);
       if (_this.isPageEmpty() && _this.currentPage > 1) {
-        !_this.currentPage--;
+        _this.currentPage--;
       }
       _this.generateTable();
     });
@@ -407,6 +410,11 @@ export class AppComponent {
     }
   }
 
+  searchInputHandler() {
+    this.setRowVisibilityBySearch($("#searchbar-field").val() as string);
+    this.generateTable();
+  }
+
   updatePagination() {
     $("#current-page").text(this.currentPage);
     $("#rows-per-page-field").val(this.rowsPerPage);
@@ -423,11 +431,14 @@ export class AppComponent {
 
   setRowVisibilityByPage() {
     this.setAllRowsToPageVisible();
-    for (let i = 0; i < this.inventoryData.length; i++) {
-      if (i < this.getFirstItemOnPage() || i > this.getLastItemOnPage()) {
+    for (let i = 0, k = 0; i < this.inventoryData.length; i++) {
+      if (k < this.getFirstItemOnPage() || k > this.getLastItemOnPage()) {
         this.inventoryData[i].toDisplayPage = false;
       }
-    }
+      if (this.inventoryData[i].toDisplaySearch) {
+        k++;
+      }
+    } 
   }
 
   setAllRowsToPageVisible() {
@@ -437,9 +448,12 @@ export class AppComponent {
   }
 
   rowsPerPageInputHandler() {
-    let input = $("#rows-per-page-field").val();
-    if (input) {
-      this.rowsPerPage = Number(input);
+    let input = Number($("#rows-per-page-field").val());
+    if (input > 0) {
+      this.rowsPerPage = input;
+      if (this.isPageEmpty() && this.currentPage > 1) {
+        this.currentPage--;
+      }
       this.generateTable();
     }
   }
