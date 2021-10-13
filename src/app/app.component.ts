@@ -74,9 +74,8 @@ export class AppComponent {
           columnHeaderId.length - 1,
           columnHeaderId.length
         ));
-        let isAscending = $(this).find("i").hasClass("fa-sort-up");
         _this.toggleSortIcon(this);
-        _this.sort(_this.sortByColumnNumber, isAscending);
+        _this.sort(_this.sortByColumnNumber, $(this).find("i").hasClass("fa-sort-up"));
         _this.generateTable();
       });
 
