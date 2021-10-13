@@ -196,14 +196,14 @@ export class AppComponent {
     if (!this.isEditable()) {
       let _this = this;
       $("tbody tr").off("click").click(function() {
-        let rowNumber = $(this).parent().children().index($(this));
+        let index = _this.getFirstItemOnPage() + $(this).parent().children().index($(this));
         _this.ngZone.run(() => {
           let dialogRef = _this.dialog.open(CarDetailsComponent, {
-            data: { image: _this.inventoryData[rowNumber].image },
+            data: { image: _this.inventoryData[index].image },
             width: '50%'
           });
           dialogRef.afterClosed().subscribe((image) => {
-            _this.inventoryData[rowNumber].image = image;
+            _this.inventoryData[index].image = image;
           });
         });
       })
