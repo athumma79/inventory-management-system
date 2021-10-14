@@ -214,6 +214,14 @@ export class AppComponent {
     }
   }
 
+  isEditable() {
+    return $('#edit-btn').hasClass('d-none');
+  }
+
+  adjustHoverEffect() {
+    this.isEditable() ? $("tbody tr").removeClass("hover") : $("tbody tr").addClass("hover");
+  }
+
   addUpdateCellHandlers() {
     let originalCellContent: string;
     $("td").focus(function() {
@@ -224,17 +232,17 @@ export class AppComponent {
       let rowNumber = $(this).parent().parent().children().index($(this).parent());
       let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
       let cellContent = $(this).text();
-      if (!_this.validateInput(cellContent, Number(columnNumber))) {
+      if (!_this.validateInput(cellContent, rowNumber, Number(columnNumber))) {
         $(this).text(originalCellContent);
         _this.openInvalidInputAlert();
         return;
       } 
       _this.updateInventoryData(rowNumber, Number(columnNumber), cellContent);
-      _this.formatNumbersOnUpdate(rowNumber, Number(columnNumber), this)
+      _this.formatCellOnUpdate(rowNumber, Number(columnNumber), this);
     });
   }
 
-  validateInput(value: string, columnNumber: number) {
+  validateInput(value: string, rowNumber: number, columnNumber: number) {
     if (value == '') {
       return true;
     }
@@ -247,7 +255,9 @@ export class AppComponent {
       case 5: case 7: regex = /^(\d+|\d{1,3}(,\d{3})*)$/; break;
       case 6: regex = /^(\$?(\d+|\d{1,3}(,\d{3})*)(\.\d{2})?)$/; break;
     }
-    return regex?.test(value);
+    let regexCheck = regex?.test(value);
+    let uniqueCheck = (columnNumber === 0) ? this.isUniqueVIN(value, rowNumber) : true;
+    return regexCheck && uniqueCheck;
   }
 
   openInvalidInputAlert() {
@@ -273,8 +283,15 @@ export class AppComponent {
     }
   }
 
-  formatNumbersOnUpdate(rowNumber: number, columnNumber: number, cell: any) {
+  formatCellOnUpdate(rowNumber: number, columnNumber: number, cell: any) {
     switch (columnNumber) {
+      case 0:
+        $(cell).text(
+          (this.inventoryData[rowNumber].vin != null) ? 
+          this.inventoryData[rowNumber].vin as string : 
+          ''
+        );
+        break;
       case 5:
         $(cell).text(
           (this.inventoryData[rowNumber].mileage != null) ? 
@@ -297,6 +314,15 @@ export class AppComponent {
         );
         break;
     }
+  }
+
+  isUniqueVIN(vin: string, rowNumber: number) {
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (this.inventoryData[i].vin == vin.toUpperCase() && i != rowNumber) {
+        return false;
+      }
+    }
+    return true;
   }
 
   addDeleteButtonHandlers() {
@@ -479,14 +505,6 @@ export class AppComponent {
       }
     }
     return count;
-  }
-
-  adjustHoverEffect() {
-    this.isEditable() ? $("tbody tr").removeClass("hover") : $("tbody tr").addClass("hover");
-  }
-
-  isEditable() {
-    return $('#edit-btn').hasClass('d-none');
   }
 
 }
