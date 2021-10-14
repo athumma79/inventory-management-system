@@ -200,14 +200,14 @@ export class AppComponent {
     if (!this.isEditable()) {
       let _this = this;
       $("tbody tr").off("click").click(function() {
-        let index = _this.getFirstItemOnPage() + $(this).parent().children().index($(this));
+        let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().children().index($(this)));
         _this.ngZone.run(() => {
           let dialogRef = _this.dialog.open(CarDetailsComponent, {
-            data: { image: _this.inventoryData[index].image },
+            data: { image: _this.inventoryData[inventoryIndex].image },
             width: '50%'
           });
           dialogRef.afterClosed().subscribe((image) => {
-            _this.inventoryData[index].image = image;
+            _this.inventoryData[inventoryIndex].image = image;
           });
         });
       })
@@ -229,20 +229,20 @@ export class AppComponent {
     });
     let _this = this;
     $("td").blur(function() {
-      let rowNumber = $(this).parent().parent().children().index($(this).parent());
-      let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
       let cellContent = $(this).text();
-      if (!_this.validateInput(cellContent, rowNumber, Number(columnNumber))) {
+      let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
+      let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().children().index($(this).parent()));
+      if (!_this.validateInput(cellContent, Number(columnNumber), inventoryIndex)) {
         $(this).text(originalCellContent);
         _this.openInvalidInputAlert();
         return;
       } 
-      _this.updateInventoryData(rowNumber, Number(columnNumber), cellContent);
-      _this.formatCellOnUpdate(rowNumber, Number(columnNumber), this);
+      _this.updateInventoryData(inventoryIndex, Number(columnNumber), cellContent);
+      _this.formatCellOnUpdate(this, Number(columnNumber), inventoryIndex);
     });
   }
 
-  validateInput(value: string, rowNumber: number, columnNumber: number) {
+  validateInput(value: string, columnNumber: number, inventoryIndex: number) {
     if (value == '') {
       return true;
     }
@@ -256,7 +256,7 @@ export class AppComponent {
       case 6: regex = /^(\$?(\d+|\d{1,3}(,\d{3})*)(\.\d{2})?)$/; break;
     }
     let regexCheck = regex?.test(value);
-    let uniqueCheck = (columnNumber === 0) ? this.isUniqueVIN(value, rowNumber) : true;
+    let uniqueCheck = (columnNumber === 0) ? this.isUniqueVIN(value, inventoryIndex) : true;
     return regexCheck && uniqueCheck;
   }
 
@@ -269,56 +269,56 @@ export class AppComponent {
     });
   }
 
-  updateInventoryData(rowNumber: number, columnNumber: number, cellContent: string) {
+  updateInventoryData(inventoryIndex: number, columnNumber: number, cellContent: string) {
     switch (columnNumber)
     {
-      case 0: this.inventoryData[rowNumber].vin = cellContent ? cellContent.toUpperCase() : null; break;
-      case 1: this.inventoryData[rowNumber].brand = cellContent ? cellContent : null; break;
-      case 2: this.inventoryData[rowNumber].model = cellContent ? cellContent : null; break;
-      case 3: this.inventoryData[rowNumber].color = cellContent ? cellContent : null; break;
-      case 4: this.inventoryData[rowNumber].year = cellContent ? Number(cellContent) : null; break;
-      case 5: this.inventoryData[rowNumber].mileage = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
-      case 6: this.inventoryData[rowNumber].price = cellContent ? Number(cellContent.replace(/[$,]/g, '')) : null; break;
-      case 7: this.inventoryData[rowNumber].quantity = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
+      case 0: this.inventoryData[inventoryIndex].vin = cellContent ? cellContent.toUpperCase() : null; break;
+      case 1: this.inventoryData[inventoryIndex].brand = cellContent ? cellContent : null; break;
+      case 2: this.inventoryData[inventoryIndex].model = cellContent ? cellContent : null; break;
+      case 3: this.inventoryData[inventoryIndex].color = cellContent ? cellContent : null; break;
+      case 4: this.inventoryData[inventoryIndex].year = cellContent ? Number(cellContent) : null; break;
+      case 5: this.inventoryData[inventoryIndex].mileage = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
+      case 6: this.inventoryData[inventoryIndex].price = cellContent ? Number(cellContent.replace(/[$,]/g, '')) : null; break;
+      case 7: this.inventoryData[inventoryIndex].quantity = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
     }
   }
 
-  formatCellOnUpdate(rowNumber: number, columnNumber: number, cell: any) {
+  formatCellOnUpdate(cell: any, columnNumber: number, inventoryIndex: number) {
     switch (columnNumber) {
       case 0:
         $(cell).text(
-          (this.inventoryData[rowNumber].vin != null) ? 
-          this.inventoryData[rowNumber].vin as string : 
+          (this.inventoryData[inventoryIndex].vin != null) ? 
+          this.inventoryData[inventoryIndex].vin as string : 
           ''
         );
         break;
       case 5:
         $(cell).text(
-          (this.inventoryData[rowNumber].mileage != null) ? 
-          Number(this.inventoryData[rowNumber].mileage).toLocaleString() : 
+          (this.inventoryData[inventoryIndex].mileage != null) ? 
+          Number(this.inventoryData[inventoryIndex].mileage).toLocaleString() : 
           ''
         );
         break;
       case 6:
         $(cell).text(
-          (this.inventoryData[rowNumber].price != null) ? 
-          '$' + Number(this.inventoryData[rowNumber].price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
+          (this.inventoryData[inventoryIndex].price != null) ? 
+          '$' + Number(this.inventoryData[inventoryIndex].price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
           ''
         );
         break;
       case 7:
         $(cell).text(
-          (this.inventoryData[rowNumber].quantity != null) ? 
-          Number(this.inventoryData[rowNumber].quantity).toLocaleString() :
+          (this.inventoryData[inventoryIndex].quantity != null) ? 
+          Number(this.inventoryData[inventoryIndex].quantity).toLocaleString() :
           ''
         );
         break;
     }
   }
 
-  isUniqueVIN(vin: string, rowNumber: number) {
+  isUniqueVIN(vin: string, inventoryIndex: number) {
     for (let i = 0; i < this.inventoryData.length; i++) {
-      if (this.inventoryData[i].vin == vin.toUpperCase() && i != rowNumber) {
+      if (this.inventoryData[i].vin == vin.toUpperCase() && i != inventoryIndex) {
         return false;
       }
     }
@@ -328,8 +328,8 @@ export class AppComponent {
   addDeleteButtonHandlers() {
     let _this = this;
     $(".delete-btn").off("click").click(function() {
-      let rowNumber = $(this).parent().parent().parent().children().index($(this).parent().parent());
-      _this.inventoryData.splice(rowNumber, 1);
+      let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().parent().children().index($(this).parent().parent()));
+      _this.inventoryData.splice(inventoryIndex, 1);
       if (_this.isPageEmpty() && _this.currentPage > 1) {
         _this.currentPage--;
       }
@@ -505,6 +505,10 @@ export class AppComponent {
       }
     }
     return count;
+  }
+
+  getInventoryIndexOfRow(rowNumber: number) {
+    return this.getFirstItemOnPage() + rowNumber;
   }
 
 }
