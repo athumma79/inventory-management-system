@@ -76,6 +76,39 @@
             "price": "26495",
             "quantity": "1",
             "image": "https://platform.cstatic-images.com/xlarge/in/v2/e2bdc9ae-f53a-55d2-8000-b29b4a593960/e05c2050-fc36-4ac3-913e-ac0976ba68b5/OSNVvo782j5RSVKADRkA6FpnMZw.jpg"
+        },
+        {
+            "vin": "1FTFX1EV1AFB69426",
+            "brand": "Ford",
+            "model": "F-150 XLT SuperCab",
+            "color": "Blue",
+            "year": "2010",
+            "mileage": "105724",
+            "price": "16995",
+            "quantity": "3",
+            "image": "https://platform.cstatic-images.com/medium/in/v2/14a91be6-e256-54f3-9762-675734bca4cc/8596b3d9-0f81-44d4-8ecc-4d158877f9eb/YhY13ttmWX_GpkKilkPF-g-LkKo.jpg"
+        },
+        {
+            "vin": "1N4AZ1CV2MC553606",
+            "brand": "Nissan",
+            "model": "Leaf SV",
+            "color": "Silver",
+            "year": "2021",
+            "mileage": "4497",
+            "price": "28750",
+            "quantity": "1",
+            "image": "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2021-nissan-leaf-mmp-1-1608314834.jpg"
+        },
+        {
+            "vin": "JM3KFBCM2J0455300",
+            "brand": "Mazda",
+            "model": "CX-5 Touring",
+            "color": "White",
+            "year": "2018",
+            "mileage": "39913",
+            "price": "26999",
+            "quantity": "1",
+            "image": "https://media.ed.edmunds-media.com/mazda/cx-5/2017/oem/2017_mazda_cx-5_4dr-suv_grand-touring_fq_oem_1_1600.jpg"
         }
     ]
 }
