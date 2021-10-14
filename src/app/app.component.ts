@@ -79,8 +79,12 @@ export class AppComponent {
         _this.generateTable();
       });
 
+      $("td").keypress(function(event) {
+        return event.key != "Enter";
+      })
+
       $("#searchbar-field").keyup((event) => {
-        if(event.key == "Enter") {
+        if (event.key == "Enter") {
           _this.searchInputHandler();
         }
       })
