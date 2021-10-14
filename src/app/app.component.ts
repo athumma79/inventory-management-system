@@ -18,6 +18,7 @@ export class AppComponent {
 
   inventoryData: Car[] = new Array();
   sortByColumnNumber: number | null = null;
+  searchValue: string = "";
   currentPage: number = 1;
   rowsPerPage: number = 5;
 
@@ -66,6 +67,8 @@ export class AppComponent {
           contenteditable: "false",
         });
         _this.addRowDetailsHandlers();
+        _this.setRowVisibilityBySearch();
+        _this.generateTable();
       });
 
       $("th").click(function() {
@@ -85,9 +88,9 @@ export class AppComponent {
 
       $("#searchbar-field").keyup((event) => {
         if (event.key == "Enter") {
-          _this.searchInputHandler();
+          _this.searchInputHandler()
         }
-      })
+      });
 
       $("#search-btn").click(() => _this.searchInputHandler());
 
@@ -334,9 +337,7 @@ export class AppComponent {
     $(".delete-btn").off("click").click(function() {
       let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().parent().children().index($(this).parent().parent()));
       _this.inventoryData.splice(inventoryIndex, 1);
-      if (_this.isPageEmpty() && _this.currentPage > 1) {
-        _this.currentPage--;
-      }
+      _this.adjustPageIfEmpty();
       _this.generateTable();
     });
   }
@@ -411,13 +412,20 @@ export class AppComponent {
     }
   }
 
-  setRowVisibilityBySearch(searchValue: string) {
+  searchInputHandler() {
+    this.setSearchValue();
+    this.setRowVisibilityBySearch();
+    this.adjustPageIfEmpty();
+    this.generateTable();
+  }
+
+  setRowVisibilityBySearch() {
     this.setAllRowsToSearchVisible();
-    if (searchValue.trim().length == 0) {
+    if (this.searchValue.length == 0) {
       return;
     }
     for (let i = 0; i < this.inventoryData.length; i++) {
-      if (!this.inventoryData[i].contains(searchValue)) {
+      if (!this.inventoryData[i].contains(this.searchValue)) {
         this.inventoryData[i].toDisplaySearch = false;
       }
     }
@@ -429,9 +437,8 @@ export class AppComponent {
     }
   }
 
-  searchInputHandler() {
-    this.setRowVisibilityBySearch($("#searchbar-field").val() as string);
-    this.generateTable();
+  setSearchValue() {
+    this.searchValue = ($("#searchbar-field").val() as string).trim();
   }
 
   updatePagination() {
@@ -471,15 +478,19 @@ export class AppComponent {
     let input = Number($("#rows-per-page-field").val());
     if (input > 0) {
       this.rowsPerPage = input;
-      if (this.isPageEmpty() && this.currentPage > 1) {
-        this.currentPage--;
-      }
+      this.adjustPageIfEmpty();
       this.generateTable();
     }
   }
 
   goToLastPage() {
     this.currentPage = Math.ceil(this.getEnabledInventoryCount() / this.rowsPerPage);
+  }
+
+  adjustPageIfEmpty() {
+    if (this.isPageEmpty() && this.currentPage > 1) {
+      this.currentPage--;
+    }
   }
 
   isPageEmpty() {
