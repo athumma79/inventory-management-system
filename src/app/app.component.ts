@@ -148,7 +148,7 @@ export class AppComponent {
     this.updatePagination();
     $("tbody").html('');
     for (let i = 0; i < this.inventoryData.length; i++) {
-      if (this.inventoryData[i].toDisplaySearch && this.inventoryData[i].toDisplayPage) {
+      if (this.isInventoryVisible(i)) {
         $("tbody").append(this.generateRow(this.inventoryData[i]));
       }
     }
@@ -216,6 +216,10 @@ export class AppComponent {
 
   isEditable() {
     return $('#edit-btn').hasClass('d-none');
+  }
+
+  isInventoryVisible(inventoryIndex: number) {
+    return this.inventoryData[inventoryIndex].toDisplaySearch && this.inventoryData[inventoryIndex].toDisplayPage;
   }
 
   adjustHoverEffect() {
@@ -349,9 +353,9 @@ export class AppComponent {
     }
   }
 
-  shouldSwap(index: number, columnNumber: number, isAscending: boolean) {
-    let curr: any = this.inventoryData[index];
-    let next: any = this.inventoryData[index + 1];
+  shouldSwap(inventoryIndex: number, columnNumber: number, isAscending: boolean) {
+    let curr: any = this.inventoryData[inventoryIndex];
+    let next: any = this.inventoryData[inventoryIndex + 1];
     switch (columnNumber) {
       case 0: curr = curr.vin; next = next.vin; break;
       case 1: curr = curr.brand; next = next.brand; break;
@@ -446,7 +450,8 @@ export class AppComponent {
 
   setRowVisibilityByPage() {
     this.setAllRowsToPageVisible();
-    for (let i = 0, k = 0; i < this.inventoryData.length; i++) {
+    let k = 0;
+    for (let i = 0; i < this.inventoryData.length; i++) {
       if (k < this.getFirstItemOnPage() || k > this.getLastItemOnPage()) {
         this.inventoryData[i].toDisplayPage = false;
       }
@@ -508,7 +513,16 @@ export class AppComponent {
   }
 
   getInventoryIndexOfRow(rowNumber: number) {
-    return this.getFirstItemOnPage() + rowNumber;
+    let count = 0;
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (this.isInventoryVisible(i)) {
+        count++;
+      }
+      if (count == this.getFirstItemOnPage() + rowNumber + 1) {
+        return i;
+      }
+    }
+    return -1;
   }
 
 }
