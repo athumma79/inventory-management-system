@@ -42,7 +42,7 @@ export class AppComponent {
       });
 
       $("#edit-btn").click(function() {
-        $("#done-btn, .button-cell").removeClass("d-none");
+        $("#save-btn, .button-cell").removeClass("d-none");
         $("#edit-btn").addClass("d-none");
         $("table").removeClass("table-hover");
         $("table").addClass("table-bordered");
@@ -56,8 +56,8 @@ export class AppComponent {
         $("tbody tr").off("click");
       });
 
-      $("#done-btn").click(function() {
-        $("#done-btn, .button-cell").addClass("d-none");
+      $("#save-btn").click(function() {
+        $("#save-btn, .button-cell").addClass("d-none");
         $("#edit-btn").removeClass("d-none");
         $("table").addClass("table-hover");
         $("table").removeClass("table-bordered");
