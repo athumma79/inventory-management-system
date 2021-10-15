@@ -151,9 +151,18 @@ tr.hover:hover td.sort-by-cell {
 
 footer {
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: 50px;
+    height: 60px;
     background-color: #73d6d1;
+}
+
+footer p {
+    margin: 0;
+    font-size: 12px;
 }
 
 .modal-header {
