@@ -114,9 +114,25 @@ export class AppComponent {
         }
       });
 
+      let originalCellContent: string;
       $("#rows-per-page-field")
         .change(() => _this.rowsPerPageInputHandler())
-        .keyup(() => _this.rowsPerPageInputHandler());
+        .keyup((event) => {
+          if (event.keyCode != 37 && event.keyCode != 39) {
+            _this.rowsPerPageInputHandler();
+          }
+        })
+        .keypress(function(event) {
+          return (event.key == "1" || event.key == "2" || event.key == "3" || event.key == "4" || event.key == "5" || event.key == "6" || event.key == "7" || event.key == "8" || event.key == "9" || event.key == "0") && !(event.key == "0" && ($(this).val() as string).length == 0);
+        })
+        .focus(function() {
+          originalCellContent = $(this).val() as string;
+        })
+        .blur(function() {
+          if (($(this).val() as string) == "0" || ($(this).val() as string).length == 0) {
+            $(this).val(originalCellContent);
+          }
+        });
     });
   }
 
@@ -230,23 +246,24 @@ export class AppComponent {
   }
 
   addUpdateCellHandlers() {
-    let originalCellContent: string;
-    $("td").focus(function() {
-      originalCellContent = $(this).text();
-    });
     let _this = this;
-    $("td").blur(function() {
-      let cellContent = $(this).text();
-      let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
-      let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().children().index($(this).parent()));
-      if (!_this.validateInput(cellContent, Number(columnNumber), inventoryIndex)) {
-        $(this).text(originalCellContent);
-        _this.openInvalidInputAlert();
-        return;
-      } 
-      _this.updateInventoryData(inventoryIndex, Number(columnNumber), cellContent);
-      _this.formatCellOnUpdate(this, Number(columnNumber), inventoryIndex);
-    });
+    let originalCellContent: string;
+    $("td")
+      .focus(function() {
+        originalCellContent = $(this).text();
+      })
+      .blur(function() {
+        let cellContent = $(this).text();
+        let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
+        let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().children().index($(this).parent()));
+        if (!_this.validateInput(cellContent, Number(columnNumber), inventoryIndex)) {
+          $(this).text(originalCellContent);
+          _this.openInvalidInputAlert();
+          return;
+        } 
+        _this.updateInventoryData(inventoryIndex, Number(columnNumber), cellContent);
+        _this.formatCellOnUpdate(this, Number(columnNumber), inventoryIndex);
+      });
   }
 
   validateInput(value: string, columnNumber: number, inventoryIndex: number) {
