@@ -117,7 +117,10 @@ export class AppComponent {
       $("#rows-per-page-field")
         .change(() => _this.rowsPerPageInputHandler())
         .keyup((event) => {
-          if (event.keyCode != 37 && event.keyCode != 39) {
+          if (($("#rows-per-page-field").val() as string) == "0") {
+            $("#rows-per-page-field").val(_this.rowsPerPage);
+          }
+          else if (event.keyCode != 37 && event.keyCode != 39) {
             _this.rowsPerPageInputHandler();
           }
         })
