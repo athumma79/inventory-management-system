@@ -237,7 +237,15 @@ export class AppComponent {
   }
 
   isInventoryVisible(inventoryIndex: number) {
-    return this.inventoryData[inventoryIndex].toDisplaySearch && this.inventoryData[inventoryIndex].toDisplayPage;
+    return this.isInventorySearchVisible(inventoryIndex) && this.isInventoryPageVisible(inventoryIndex);
+  }
+
+  isInventorySearchVisible(inventoryIndex: number) {
+    return this.inventoryData[inventoryIndex].toDisplaySearch;
+  }
+
+  isInventoryPageVisible(inventoryIndex: number) {
+    return this.inventoryData[inventoryIndex].toDisplayPage;
   }
 
   adjustHoverEffect() {
@@ -542,10 +550,10 @@ export class AppComponent {
   getInventoryIndexOfRow(rowNumber: number) {
     let count = 0;
     for (let i = 0; i < this.inventoryData.length; i++) {
-      if (this.isInventoryVisible(i)) {
+      if (this.isInventorySearchVisible(i)) {
         count++;
       }
-      if (count == this.getFirstItemOnPage() + rowNumber + 1) {
+      if (count == (this.getFirstItemOnPage() + rowNumber + 1)) {
         return i;
       }
     }
