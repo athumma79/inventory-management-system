@@ -396,18 +396,23 @@ export class AppComponent {
       case 7: curr = curr.quantity; next = next.quantity; break;
     }
     if (columnNumber < 4) {
-      curr = curr ? curr.toLowerCase() : this.subInfinityForBlanksInSort(isAscending);
-      next = next ? next.toLowerCase() : this.subInfinityForBlanksInSort(isAscending);
+      curr = curr ? curr.toLowerCase() : this.subInfinityForBlanksInSort(isAscending, true);
+      next = next ? next.toLowerCase() : this.subInfinityForBlanksInSort(isAscending, true);
     }
     else {
-      curr = curr ? Number(curr) : this.subInfinityForBlanksInSort(isAscending);
-      next = next ? Number(next) : this.subInfinityForBlanksInSort(isAscending);
+      curr = curr ? Number(curr) : this.subInfinityForBlanksInSort(isAscending, false);
+      next = next ? Number(next) : this.subInfinityForBlanksInSort(isAscending, false);
     }
     return isAscending ? curr > next : curr < next;
   }
 
-  subInfinityForBlanksInSort(isAscending: boolean) {
-    return isAscending ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+  subInfinityForBlanksInSort(isAscending: boolean, isChar: boolean) {
+    if (isChar) {
+      return isAscending ? '\uFFFF' : '\u0000';
+    }
+    else {
+      return isAscending ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+    }
   }
 
   highlightSortByColumn(columnNumber: number) {
