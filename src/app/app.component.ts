@@ -95,6 +95,7 @@ export class AppComponent {
       $("#search-btn").click(() => _this.searchInputHandler());
 
       $("#clear-search-btn").click(function() {
+        _this.searchValue = "";
         $("#searchbar-field").val("");
         _this.setAllRowsToSearchVisible();
         _this.generateTable();
