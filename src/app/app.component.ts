@@ -68,6 +68,9 @@ export class AppComponent {
         });
         _this.addRowDetailsHandlers();
         _this.setRowVisibilityBySearch();
+        if (_this.sortByColumnNumber) {
+          _this.sort(_this.sortByColumnNumber, $("#column-header-" + _this.sortByColumnNumber).find("i").hasClass("fa-sort-up"));
+        }
         _this.generateTable();
       });
 
