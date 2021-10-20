@@ -2,5 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    margin-top: 27.5px;
+}
+
+.modal-body p {
+    margin: 0;
 }
