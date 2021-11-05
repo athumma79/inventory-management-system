@@ -1,46 +1,48 @@
 #!/bin/bash
 
+api="http://localhost:3000"
+
 node ../api/app.js &
 sleep 0.5
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "KNAFB1217Y5836917", "brand": "Acura", "model": "MDX", "color": "White", "year": "2008", "mileage": "65390", "price": "7495", "quantity": "1", "image": "https://2qibqm39xjt6q46gf1rwo2g1-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/20736969_web1_M-2020_Acura_MDX_A-Spec_front.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "JN8AZ2NF7C9539531", "brand": "Audi", "model": "A6", "color": "Red", "year": "2018", "mileage": "25185", "price": "39990", "quantity": "2", "image": "https://cdn.pocket-lint.com/r/s/1200x/assets/images/146601-cars-review-audi-a6-avant-exterior-image1-knrtkean17.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "2HGEJ1125RH504045", "brand": "Tesla", "model": "Model 3", "color": "Black", "year": "2019", "mileage": "13200", "price": "44998", "quantity": "4", "image": "https://blog.vipautoaccessories.com/wp-content/uploads/2020/10/hero-1.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1N4AL2EP8DC214483", "brand": "Honda", "model": "Civic", "color": "Blue", "year": "2005", "mileage": "95230", "price": "5763", "quantity": "2", "image": "https://blogmedia.dealerfire.com/wp-content/uploads/sites/749/2018/10/2019-Honda-Civic-Coupe-Aegean-Blue-Metallic_o.jpeg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1GC1KYE80EF172707", "brand": "Toyota", "model": "Corolla", "color": "Green", "year": "2013", "mileage": "30195", "price": "12990", "quantity": "1", "image": "https://img2.carmax.com/img/vehicles/21050064/1_cleaned.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1G1FE1R74H0128327", "brand": "Chevrolet", "model": "Camaro 1SS", "color": "Blue", "year": "2017", "mileage": "34478", "price": "37500", "quantity": "2", "image": "https://platform.cstatic-images.com/in/v2/e1282f50-7e9b-5673-9abf-339394b81312/62f66f6a-16f6-477b-ace3-2234d9a27c8f/6IZ6fDI1VIM2oknUwaC1JUowCSo.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1C4RDHDG0JC261436", "brand": "Dodge", "model": "Durango GT", "color": "Black", "year": "2018", "mileage": "82296", "price": "26495", "quantity": "1", "image": "https://platform.cstatic-images.com/xlarge/in/v2/e2bdc9ae-f53a-55d2-8000-b29b4a593960/e05c2050-fc36-4ac3-913e-ac0976ba68b5/OSNVvo782j5RSVKADRkA6FpnMZw.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1FTFX1EV1AFB69426", "brand": "Ford", "model": "F-150 XLT SuperCab", "color": "Blue", "year": "2010", "mileage": "105724", "price": "16995", "quantity": "3", "image": "https://platform.cstatic-images.com/medium/in/v2/14a91be6-e256-54f3-9762-675734bca4cc/8596b3d9-0f81-44d4-8ecc-4d158877f9eb/YhY13ttmWX_GpkKilkPF-g-LkKo.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "1N4AZ1CV2MC553606", "brand": "Nissan", "model": "Leaf SV", "color": "Silver", "year": "2021", "mileage": "4497", "price": "28750", "quantity": "1", "image": "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2021-nissan-leaf-mmp-1-1608314834.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "JM3KFBCM2J0455300", "brand": "Mazda", "model": "CX-5 Touring", "color": "White", "year": "2018", "mileage": "39913", "price": "26999", "quantity": "1", "image": "https://media.ed.edmunds-media.com/mazda/cx-5/2017/oem/2017_mazda_cx-5_4dr-suv_grand-touring_fq_oem_1_1600.jpg" } }' \
-    http://localhost:3000/cars
+    $api/cars
 
 pgrep node | xargs kill
