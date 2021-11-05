@@ -231,7 +231,7 @@ export class AppComponent {
             width: '50%'
           });
           dialogRef.afterClosed().subscribe((image) => {
-            _this.inventoryData[inventoryIndex].image = image;
+            _this.inventoryData[inventoryIndex].image = image ? image : null;
           });
         });
       })
