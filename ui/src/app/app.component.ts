@@ -8,6 +8,7 @@ import { CarDetailsComponent } from './car-details/car-details.component';
 import { InvalidInputAlertComponent } from './invalid-input-alert/invalid-input-alert.component';
 
 import { Car } from './models/car';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -140,7 +141,8 @@ export class AppComponent {
   }
 
   populateInventoryData() {
-    this.httpClient.get("assets/dummy-data.json").subscribe((data: any) => {
+    this.httpClient.get(environment.api + "/cars").subscribe((data: any) => {
+      console.log(data);
       for (let i = 0; i < data.cars.length; i++) {
         let newCar = new Car();
   

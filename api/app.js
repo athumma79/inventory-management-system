@@ -6,6 +6,9 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+var cors = require('cors')
+app.use(cors())
+
 var mysql = require('mysql')
 var pool = mysql.createPool({
   host: 'localhost',
@@ -23,6 +26,7 @@ app.get('/cars', (req, res) => {
 
         connection.query(query, function (err, rows, fields) {
             if (err) throw err
+            formatInventoryData(rows)
             res.json({cars: rows})
             connection.release()
         })
@@ -217,6 +221,17 @@ app.post('/cars/:vin/image', (req, res) => {
 
 function addQuotes(value) {
     return (typeof value == "string") && (value != null) ? `'${value}'` : value
+}
+
+function formatInventoryData(data) {
+    for (let i = 0; i < data.length; i++) { 
+        for (let key in data[i]) {
+            if(key.toLowerCase() !== key){
+                data[i][key.toLowerCase()] = data[i][key];
+                delete data[i][key];
+            }
+        }
+    }
 }
 
 app.listen(port, () => {
