@@ -21,7 +21,7 @@ app.get('/cars', (req, res) => {
     pool.getConnection(function (err, connection) {
         if (err) throw err
 
-        let query = `SELECT VEHICLE.VIN, COLOR, YEAR, MILEAGE, IMAGE, BRAND, MODEL, QUANTITY, PRICE
+        let query = `SELECT VEHICLE.VIN, COLOR, YEAR, MILEAGE, IMAGE, BRAND, MODEL, PRICE
         FROM VEHICLE
         LEFT OUTER JOIN VEHICLE_TYPE ON VEHICLE.VEHICLE_TYPE_ID = VEHICLE_TYPE.VEHICLE_TYPE_ID
         LEFT OUTER JOIN INVENTORY ON VEHICLE.VIN = INVENTORY.VIN;`
@@ -53,8 +53,8 @@ app.post('/cars', (req, res) => {
                 connection.query(vehicleQuery, function (err, rows, fields) {
                     if (err) throw err
 
-                    let inventoryQuery = `INSERT INTO INVENTORY (VIN, QUANTITY, PRICE)
-                        VALUES (${addQuotes(car.vin)}, ${addQuotes(car.quantity)}, ${addQuotes(car.price)})`
+                    let inventoryQuery = `INSERT INTO INVENTORY (VIN, PRICE)
+                        VALUES (${addQuotes(car.vin)}, ${addQuotes(car.price)})`
             
                     connection.query(inventoryQuery, function (err, rows, fields) {
                         if (err) throw err
@@ -75,8 +75,8 @@ app.post('/cars', (req, res) => {
                     connection.query(vehicleQuery, function (err, rows, fields) {
                         if (err) throw err
         
-                        let inventoryQuery = `INSERT INTO INVENTORY (VIN, QUANTITY, PRICE)
-                            VALUES (${addQuotes(car.vin)}, ${addQuotes(car.quantity)}, ${addQuotes(car.price)})`
+                        let inventoryQuery = `INSERT INTO INVENTORY (VIN, PRICE)
+                            VALUES (${addQuotes(car.vin)}, ${addQuotes(car.price)})`
                 
                         connection.query(inventoryQuery, function (err, rows, fields) {
                             if (err) throw err
@@ -98,7 +98,7 @@ app.put('/cars/:vin', (req, res) => {
         if (err) throw err
 
         let inventoryQuery = `UPDATE INVENTORY
-            SET QUANTITY = ${addQuotes(car.quantity)}, PRICE = ${addQuotes(car.price)}
+            SET PRICE = ${addQuotes(car.price)}
             WHERE VIN = ${addQuotes(vin)};`
 
         connection.query(inventoryQuery, function (err, rows, fields) {
@@ -218,7 +218,7 @@ app.post('/cars/:vin/image', (req, res) => {
 
     pool.getConnection(function (err, connection) {
         if (err) throw err
-        
+
         let query = `UPDATE VEHICLE
             SET IMAGE = ${addQuotes(image)}
             WHERE VIN = ${addQuotes(vin)};`

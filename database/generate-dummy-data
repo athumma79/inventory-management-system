@@ -6,7 +6,7 @@ node ../api/app.js &
 sleep 0.5
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "KNAFB1217Y5836917", "brand": "Acura", "model": "MDX", "color": "White", "year": "2008", "mileage": "65390", "price": "7495", "quantity": "1" } }' \
+    -d '{ "car": { "vin": "KNAFB1217Y5836917", "brand": "Acura", "model": "MDX", "color": "White", "year": "2008", "mileage": "65390", "price": "7495" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -14,7 +14,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/KNAFB1217Y5836917/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "JN8AZ2NF7C9539531", "brand": "Audi", "model": "A6", "color": "Red", "year": "2018", "mileage": "25185", "price": "39990", "quantity": "2" } }' \
+    -d '{ "car": { "vin": "JN8AZ2NF7C9539531", "brand": "Audi", "model": "A6", "color": "Red", "year": "2018", "mileage": "25185", "price": "39990" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -22,7 +22,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/JN8AZ2NF7C9539531/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "2HGEJ1125RH504045", "brand": "Tesla", "model": "Model 3", "color": "Black", "year": "2019", "mileage": "13200", "price": "44998", "quantity": "4" } }' \
+    -d '{ "car": { "vin": "2HGEJ1125RH504045", "brand": "Tesla", "model": "Model 3", "color": "Black", "year": "2019", "mileage": "13200", "price": "44998" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -30,7 +30,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/2HGEJ1125RH504045/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1N4AL2EP8DC214483", "brand": "Honda", "model": "Civic", "color": "Blue", "year": "2005", "mileage": "95230", "price": "5763", "quantity": "2" } }' \
+    -d '{ "car": { "vin": "1N4AL2EP8DC214483", "brand": "Honda", "model": "Civic", "color": "Blue", "year": "2005", "mileage": "95230", "price": "5763" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -38,7 +38,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1N4AL2EP8DC214483/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1GC1KYE80EF172707", "brand": "Toyota", "model": "Corolla", "color": "Green", "year": "2013", "mileage": "30195", "price": "12990", "quantity": "1" } }' \
+    -d '{ "car": { "vin": "1GC1KYE80EF172707", "brand": "Toyota", "model": "Corolla", "color": "Green", "year": "2013", "mileage": "30195", "price": "12990" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -46,7 +46,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1GC1KYE80EF172707/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1G1FE1R74H0128327", "brand": "Chevrolet", "model": "Camaro 1SS", "color": "Blue", "year": "2017", "mileage": "34478", "price": "37500", "quantity": "2" } }' \
+    -d '{ "car": { "vin": "1G1FE1R74H0128327", "brand": "Chevrolet", "model": "Camaro 1SS", "color": "Blue", "year": "2017", "mileage": "34478", "price": "37500" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -54,7 +54,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1G1FE1R74H0128327/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1C4RDHDG0JC261436", "brand": "Dodge", "model": "Durango GT", "color": "Black", "year": "2018", "mileage": "82296", "price": "26495", "quantity": "1" } }' \
+    -d '{ "car": { "vin": "1C4RDHDG0JC261436", "brand": "Dodge", "model": "Durango GT", "color": "Black", "year": "2018", "mileage": "82296", "price": "26495" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -62,7 +62,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1C4RDHDG0JC261436/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1FTFX1EV1AFB69426", "brand": "Ford", "model": "F-150 XLT SuperCab", "color": "Blue", "year": "2010", "mileage": "105724", "price": "16995", "quantity": "3" } }' \
+    -d '{ "car": { "vin": "1FTFX1EV1AFB69426", "brand": "Ford", "model": "F-150 XLT SuperCab", "color": "Blue", "year": "2010", "mileage": "105724", "price": "16995" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -70,7 +70,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1FTFX1EV1AFB69426/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "1N4AZ1CV2MC553606", "brand": "Nissan", "model": "Leaf SV", "color": "Silver", "year": "2021", "mileage": "4497", "price": "28750", "quantity": "1" } }' \
+    -d '{ "car": { "vin": "1N4AZ1CV2MC553606", "brand": "Nissan", "model": "Leaf SV", "color": "Silver", "year": "2021", "mileage": "4497", "price": "28750" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
@@ -78,7 +78,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars/1N4AZ1CV2MC553606/image
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "car": { "vin": "JM3KFBCM2J0455300", "brand": "Mazda", "model": "CX-5 Touring", "color": "White", "year": "2018", "mileage": "39913", "price": "26999", "quantity": "1" } }' \
+    -d '{ "car": { "vin": "JM3KFBCM2J0455300", "brand": "Mazda", "model": "CX-5 Touring", "color": "White", "year": "2018", "mileage": "39913", "price": "26999" } }' \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \

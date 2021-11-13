@@ -153,7 +153,6 @@ export class AppComponent {
         newCar.year = Number(data.cars[i].year);
         newCar.mileage = Number(data.cars[i].mileage);
         newCar.price = Number(data.cars[i].price);
-        newCar.quantity = Number(data.cars[i].quantity);
         newCar.image = data.cars[i].image;
   
         this.inventoryData.push(newCar);
@@ -215,7 +214,6 @@ export class AppComponent {
       case 4: cell += (data.year != null) ? data.year : ''; break;
       case 5: cell += (data.mileage != null) ? data.mileage.toLocaleString() : ''; break;
       case 6: cell += (data.price != null) ? '$' + data.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''; break;
-      case 7: cell += (data.quantity != null) ? data.quantity.toLocaleString() : ''; break;
     }
     return cell;
   }
@@ -316,7 +314,6 @@ export class AppComponent {
       case 4: this.inventoryData[inventoryIndex].year = cellContent ? Number(cellContent) : null; break;
       case 5: this.inventoryData[inventoryIndex].mileage = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
       case 6: this.inventoryData[inventoryIndex].price = cellContent ? Number(cellContent.replace(/[$,]/g, '')) : null; break;
-      case 7: this.inventoryData[inventoryIndex].quantity = cellContent ? Number(cellContent.replace(/[,]/g, '')) : null; break;
     }
   }
 
@@ -340,13 +337,6 @@ export class AppComponent {
         $(cell).text(
           (this.inventoryData[inventoryIndex].price != null) ? 
           '$' + Number(this.inventoryData[inventoryIndex].price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
-          ''
-        );
-        break;
-      case 7:
-        $(cell).text(
-          (this.inventoryData[inventoryIndex].quantity != null) ? 
-          Number(this.inventoryData[inventoryIndex].quantity).toLocaleString() :
           ''
         );
         break;
@@ -395,7 +385,6 @@ export class AppComponent {
       case 4: curr = curr.year; next = next.year; break;
       case 5: curr = curr.mileage; next = next.mileage; break;
       case 6: curr = curr.price; next = next.price; break;
-      case 7: curr = curr.quantity; next = next.quantity; break;
     }
     if (columnNumber < 4) {
       curr = curr ? curr.toLowerCase() : this.subInfinityForBlanksInSort(isAscending, true);

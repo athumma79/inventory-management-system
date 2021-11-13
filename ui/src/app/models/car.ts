@@ -6,7 +6,6 @@ export class Car {
     year: number | null;
     mileage: number | null;
     price: number | null;
-    quantity: number | null;
     image: string | null;
     toDisplaySearch: boolean;
     toDisplayPage: boolean;
@@ -19,7 +18,6 @@ export class Car {
         this.year = null;
         this.mileage = null;
         this.price = null;
-        this.quantity = null;
         this.image = null;
         this.toDisplaySearch = true;
         this.toDisplayPage = true;
@@ -32,7 +30,6 @@ export class Car {
         this.color?.toLowerCase().includes(searchValue.toLowerCase()) ||
         this.year == Number(searchValue) ||
         this.mileage == Number(searchValue.replace(/[,]/g, '')) ||
-        this.price == Number(searchValue.replace(/[$,]/g, '')) ||
-        this.quantity == Number(searchValue.replace(/[,]/g, ''));
+        this.price == Number(searchValue.replace(/[$,]/g, ''));
     }
 }
