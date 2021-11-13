@@ -11,13 +11,15 @@ export class CarDetailsComponent implements OnInit {
 
   image: string;
   defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
+  label: string;
 
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<CarDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { image: string }
+    @Inject(MAT_DIALOG_DATA) public data: { image: string, label: string }
   ) {
     this.image = data.image ? data.image : this.defaultImage;
+    this.label = data.label.trim().length > 0 ? data.label.trim() : "Car";
     dialogRef.beforeClosed().subscribe(() => {
       dialogRef.close(this.getImageToPass());
     });

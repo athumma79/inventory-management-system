@@ -225,7 +225,10 @@ export class AppComponent {
         let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().children().index($(this)));
         _this.ngZone.run(() => {
           let dialogRef = _this.dialog.open(CarDetailsComponent, {
-            data: { image: _this.inventoryData[inventoryIndex].image },
+            data: {
+              image: _this.inventoryData[inventoryIndex].image,
+              label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : "") + " " + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : "") 
+            },
             width: '50%'
           });
           dialogRef.afterClosed().subscribe((image) => {
