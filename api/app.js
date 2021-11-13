@@ -19,6 +19,8 @@ var pool = mysql.createPool({
 
 app.get('/cars', (req, res) => {
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+
         let query = `SELECT VEHICLE.VIN, COLOR, YEAR, MILEAGE, IMAGE, BRAND, MODEL, QUANTITY, PRICE
         FROM VEHICLE
         LEFT OUTER JOIN VEHICLE_TYPE ON VEHICLE.VEHICLE_TYPE_ID = VEHICLE_TYPE.VEHICLE_TYPE_ID
@@ -37,6 +39,8 @@ app.post('/cars', (req, res) => {
     let car = req.body.car
 
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+
         let vehicleTypeExistsQuery = `SELECT VEHICLE_TYPE_ID
             FROM VEHICLE_TYPE
             WHERE BRAND = ${addQuotes(car.brand)} AND MODEL = ${addQuotes(car.model)};`
@@ -91,6 +95,8 @@ app.put('/cars/:vin', (req, res) => {
     let car = req.body.car
 
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+
         let inventoryQuery = `UPDATE INVENTORY
             SET QUANTITY = ${addQuotes(car.quantity)}, PRICE = ${addQuotes(car.price)}
             WHERE VIN = ${addQuotes(vin)};`
@@ -140,6 +146,8 @@ app.delete('/cars/:vin', (req, res) => {
     let vin = req.params.vin
 
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+
         let inventoryQuery = `DELETE FROM INVENTORY
             WHERE VIN = ${addQuotes(vin)};`
 
@@ -190,6 +198,8 @@ app.get('/cars/:vin/image', (req, res) => {
     let vin = req.params.vin
 
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+
         let query = `SELECT IMAGE
             FROM VEHICLE
             WHERE VIN = ${addQuotes(vin)};`
@@ -207,6 +217,8 @@ app.post('/cars/:vin/image', (req, res) => {
     let image = req.body.image
 
     pool.getConnection(function (err, connection) {
+        if (err) throw err
+        
         let query = `UPDATE VEHICLE
             SET IMAGE = ${addQuotes(image)}
             WHERE VIN = ${addQuotes(vin)};`
