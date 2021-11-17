@@ -232,7 +232,10 @@ app.post('/cars/:vin/image', (req, res) => {
 })
 
 function addQuotes(value) {
-    return (typeof value == "string") && (value != null) ? `'${value}'` : value
+    if (value == null || value == undefined) {
+        return null;
+    }
+    return (typeof value == "string") ? `'${value}'` : value;
 }
 
 function formatInventoryData(data) {
