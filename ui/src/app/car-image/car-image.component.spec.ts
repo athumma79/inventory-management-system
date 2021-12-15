@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvalidInputAlertComponent } from './invalid-input-alert.component';
+import { CarImageComponent } from './car-image.component';
 
-describe('InvalidInputAlertComponent', () => {
-  let component: InvalidInputAlertComponent;
-  let fixture: ComponentFixture<InvalidInputAlertComponent>;
+describe('CarImageComponent', () => {
+  let component: CarImageComponent;
+  let fixture: ComponentFixture<CarImageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InvalidInputAlertComponent ]
+      declarations: [ CarImageComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InvalidInputAlertComponent);
+    fixture = TestBed.createComponent(CarImageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

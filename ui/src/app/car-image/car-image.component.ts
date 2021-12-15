@@ -3,11 +3,11 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ImageURLPromptComponent } from '../image-url-prompt/image-url-prompt.component';
 
 @Component({
-  selector: 'app-car-details',
-  templateUrl: './car-details.component.html',
-  styleUrls: ['./car-details.component.css'],
+  selector: 'app-car-image',
+  templateUrl: './car-image.component.html',
+  styleUrls: ['./car-image.component.css'],
 })
-export class CarDetailsComponent implements OnInit {
+export class CarImageComponent implements OnInit {
 
   image: string;
   defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
@@ -15,7 +15,7 @@ export class CarDetailsComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public dialogRef: MatDialogRef<CarDetailsComponent>,
+    public dialogRef: MatDialogRef<CarImageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { image: string, label: string }
   ) {
     this.image = data.image ? data.image : this.defaultImage;

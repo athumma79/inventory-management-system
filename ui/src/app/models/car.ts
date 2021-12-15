@@ -9,6 +9,7 @@ export class Car {
     image: string | null;
     toDisplaySearch: boolean;
     toDisplayPage: boolean;
+    dbStatus: string | null; //add, update, or null
 
     constructor() {
         this.vin = null;
@@ -21,6 +22,7 @@ export class Car {
         this.image = null;
         this.toDisplaySearch = true;
         this.toDisplayPage = true;
+        this.dbStatus = null;
     }
 
     contains(searchValue: string) {

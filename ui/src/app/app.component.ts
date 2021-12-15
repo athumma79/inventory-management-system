@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { NgZone } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
 import * as $ from 'jquery';
 
 import { MatDialog } from '@angular/material/dialog';
-import { CarDetailsComponent } from './car-details/car-details.component';
-import { InvalidInputAlertComponent } from './invalid-input-alert/invalid-input-alert.component';
+import { ErrorAlertComponent } from './error-alert/error-alert.component';
+import { CarImageComponent } from './car-image/car-image.component';
 
 import { Car } from './models/car';
-import { environment } from 'src/environments/environment';
+import { CarService } from './services/car.service';
 
 @Component({
   selector: 'app-root',
@@ -18,161 +17,171 @@ import { environment } from 'src/environments/environment';
 export class AppComponent {
 
   inventoryData: Car[] = new Array();
+  inventoryDataToDelete: Car[] = new Array();
   sortByColumnNumber: number | null = null;
-  searchValue: string = "";
+  searchValue: string = '';
   currentPage: number = 1;
   rowsPerPage: number = 5;
 
   constructor(
-    private httpClient: HttpClient, 
-    public dialog: MatDialog, 
+    private carService: CarService,
+    private dialog: MatDialog, 
     private ngZone: NgZone
   ) {}
 
   ngOnInit() {
-    this.populateInventoryData();
-
     let _this = this;
     $(function() {
-      _this.loadHeadingIds();
-      _this.generateTable();
+      _this.initializeTable();
 
-      $("#add-row-btn").click(function() {
-        _this.inventoryData.push(new Car());
+      $('#add-row-btn').click(function() {
+        let newCar = new Car();
+        newCar.dbStatus = 'add';
+        _this.inventoryData.push(newCar);
         _this.goToLastPage();
         _this.generateTable();
       });
 
-      $("#edit-btn").click(function() {
-        $("#save-btn, .button-cell").removeClass("d-none");
-        $("#edit-btn").addClass("d-none");
-        $("table").removeClass("table-hover");
-        $("table").addClass("table-bordered");
+      $('#edit-btn').click(function() {
+        $('#save-btn, .button-cell').removeClass('d-none');
+        $('#edit-btn').addClass('d-none');
+        $('table').removeClass('table-hover');
+        $('table').addClass('table-bordered');
         _this.adjustHoverEffect();
-        $("td").attr({
-          contenteditable: "true",
+        $('td').attr({
+          contenteditable: 'true'
         });
-        $(".button-cell").attr({
-          contenteditable: "false",
+        $('.column-data-0, .button-cell').attr({
+          contenteditable: 'false'
         });
-        $("tbody tr").off("click");
+        $('tbody tr').off('click');
       });
 
-      $("#save-btn").click(function() {
-        $("#save-btn, .button-cell").addClass("d-none");
-        $("#edit-btn").removeClass("d-none");
-        $("table").addClass("table-hover");
-        $("table").removeClass("table-bordered");
+      $('#save-btn').click(function() {
+        if (!_this.saveDataToDB()) {
+          return;
+        }
+        $('#save-btn, .button-cell').addClass('d-none');
+        $('#edit-btn').removeClass('d-none');
+        $('table').addClass('table-hover');
+        $('table').removeClass('table-bordered');
         _this.adjustHoverEffect();
-        $("td").attr({
-          contenteditable: "false",
+        $('td').attr({
+          contenteditable: 'false'
         });
         _this.addRowDetailsHandlers();
         _this.setRowVisibilityBySearch();
         if (_this.sortByColumnNumber) {
-          _this.sort(_this.sortByColumnNumber, $("#column-header-" + _this.sortByColumnNumber).find("i").hasClass("fa-sort-up"));
+          _this.sort(_this.sortByColumnNumber, $('#column-header-' + _this.sortByColumnNumber).find('i').hasClass('fa-sort-up'));
         }
         _this.generateTable();
       });
 
-      $("th").click(function() {
-        let columnHeaderId = $(this).attr("id");
+      $('th').click(function() {
+        let columnHeaderId = $(this).attr('id');
         _this.sortByColumnNumber = Number(columnHeaderId?.substring(
           columnHeaderId.length - 1,
           columnHeaderId.length
         ));
         _this.toggleSortIcon(this);
-        _this.sort(_this.sortByColumnNumber, $(this).find("i").hasClass("fa-sort-up"));
+        _this.sort(_this.sortByColumnNumber, $(this).find('i').hasClass('fa-sort-up'));
         _this.generateTable();
       });
 
-      $("td").keypress(function(event) {
-        return event.key != "Enter";
+      $('td').keypress(function(event) {
+        return event.key != 'Enter';
       })
 
-      $("#searchbar-field").keyup((event) => {
-        if (event.key == "Enter") {
+      $('#searchbar-field').keyup((event) => {
+        if (event.key == 'Enter') {
           _this.searchInputHandler()
         }
       });
 
-      $("#search-btn").click(() => _this.searchInputHandler());
+      $('#search-btn').click(() => _this.searchInputHandler());
 
-      $("#clear-search-btn").click(function() {
-        _this.searchValue = "";
-        $("#searchbar-field").val("");
+      $('#clear-search-btn').click(function() {
+        _this.searchValue = '';
+        $('#searchbar-field').val('');
         _this.setAllRowsToSearchVisible();
         _this.generateTable();
       });
 
-      $("#next-page-btn").click(function() {
+      $('#next-page-btn').click(function() {
         if (!_this.isPageOnTopEdgeOfBounds()) {
           _this.currentPage++;
           _this.generateTable();
         }
       });
 
-      $("#prev-page-btn").click(function() {
+      $('#prev-page-btn').click(function() {
         if (!_this.isPageOnBottomEdgeOfBounds()) {
           _this.currentPage--;
           _this.generateTable();
         }
       });
 
-      $("#rows-per-page-field")
+      $('#rows-per-page-field')
         .change(() => _this.rowsPerPageInputHandler())
         .keyup((event) => {
-          if (($("#rows-per-page-field").val() as string) == "0") {
-            $("#rows-per-page-field").val(_this.rowsPerPage);
+          if (($('#rows-per-page-field').val() as string) == '0') {
+            $('#rows-per-page-field').val(_this.rowsPerPage);
           }
           else if (event.keyCode != 37 && event.keyCode != 39) {
             _this.rowsPerPageInputHandler();
           }
         })
         .keypress(function(event) {
-          return (event.key == "1" || event.key == "2" || event.key == "3" || event.key == "4" || event.key == "5" || event.key == "6" || event.key == "7" || event.key == "8" || event.key == "9" || event.key == "0") && !(event.key == "0" && ($(this).val() as string).length == 0);
+          return (event.key == '1' || event.key == '2' || event.key == '3' || event.key == '4' || event.key == '5' || event.key == '6' || event.key == '7' || event.key == '8' || event.key == '9' || event.key == '0') && !(event.key == '0' && ($(this).val() as string).length == 0);
         })
         .blur(function() {
-          if (($(this).val() as string) == "0" || ($(this).val() as string).length == 0) {
+          if (($(this).val() as string) == '0' || ($(this).val() as string).length == 0) {
             $(this).val(_this.rowsPerPage);
           }
         });
     });
   }
 
-  populateInventoryData() {
-    this.httpClient.get(environment.api + "/cars").subscribe((data: any) => {
-      console.log(data);
+  initializeTable() {
+    this.populateInventoryData(() => {
+      this.loadHeadingIds();
+      this.generateTable();
+    });
+  }
+
+  populateInventoryData(callback: Function) {
+    this.carService.getCars((data: any) => {
       for (let i = 0; i < data.cars.length; i++) {
         let newCar = new Car();
-  
+
         newCar.vin = data.cars[i].vin;
         newCar.brand = data.cars[i].brand;
         newCar.model = data.cars[i].model;
         newCar.color = data.cars[i].color;
-        newCar.year = Number(data.cars[i].year);
-        newCar.mileage = Number(data.cars[i].mileage);
-        newCar.price = Number(data.cars[i].price);
+        newCar.year = (data.cars[i].year != null) ? Number(data.cars[i].year) : null;
+        newCar.mileage = (data.cars[i].mileage != null) ? Number(data.cars[i].mileage) : null;
+        newCar.price = (data.cars[i].price != null) ? Number(data.cars[i].price) : null;
         newCar.image = data.cars[i].image;
-  
+
         this.inventoryData.push(newCar);
       }
-    })
+      callback();
+    });
   }
 
   loadHeadingIds() {
-    let headings = document.querySelectorAll("th");
+    let headings = document.querySelectorAll('th');
     for (let i = 0; i < headings.length; i++) {
-      $(headings[i]).attr("id", "column-header-" + i);
+      $(headings[i]).attr('id', 'column-header-' + i);
     }
   }
 
   generateTable() {
     this.updatePagination();
-    $("tbody").html('');
+    $('tbody').html('');
     for (let i = 0; i < this.inventoryData.length; i++) {
       if (this.isInventoryVisible(i)) {
-        $("tbody").append(this.generateRow(this.inventoryData[i]));
+        $('tbody').append(this.generateRow(this.inventoryData[i], i));
       }
     }
     this.addDeleteButtonHandlers();
@@ -184,11 +193,11 @@ export class AppComponent {
     }
   }
 
-  generateRow(data: any) {
+  generateRow(data: any, rowNumber: number) {
     let row = '<tr>';
-    for (let i = 0; i < document.querySelectorAll("th").length; i++) {
-      row += '<td class="column-data-' + i + ' align-middle"';
-      row += this.isEditable() ? ' contenteditable="true"' : '';
+    for (let i = 0; i < document.querySelectorAll('th').length; i++) {
+      row += '<td class="column-data-' + i + '" align-middle"';
+      row += (this.isEditable() && i != 0) || (i == 0 && this.inventoryData[rowNumber].dbStatus == 'add') ? ' contenteditable="true"' : '';
       row += '>';
       row += this.generateCellContents(data, i);
       row += '</td>';
@@ -221,13 +230,13 @@ export class AppComponent {
   addRowDetailsHandlers() {
     if (!this.isEditable()) {
       let _this = this;
-      $("tbody tr").off("click").click(function() {
+      $('tbody tr').off('click').click(function() {
         let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().children().index($(this)));
         _this.ngZone.run(() => {
-          let dialogRef = _this.dialog.open(CarDetailsComponent, {
+          let dialogRef = _this.dialog.open(CarImageComponent, {
             data: {
               image: _this.inventoryData[inventoryIndex].image,
-              label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : "") + " " + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : "") 
+              label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : '') + ' ' + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : '') 
             },
             width: '50%'
           });
@@ -256,23 +265,28 @@ export class AppComponent {
   }
 
   adjustHoverEffect() {
-    this.isEditable() ? $("tbody tr").removeClass("hover") : $("tbody tr").addClass("hover");
+    this.isEditable() ? $('tbody tr').removeClass('hover') : $('tbody tr').addClass('hover');
   }
 
   addUpdateCellHandlers() {
     let _this = this;
     let originalCellContent: string;
-    $("td")
+    $('td')
       .focus(function() {
         originalCellContent = $(this).text();
+        let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().children().index($(this).parent()));
+        if (_this.inventoryData[inventoryIndex].dbStatus != 'add') {
+          _this.inventoryData[inventoryIndex].dbStatus = 'update';
+        }
       })
       .blur(function() {
         let cellContent = $(this).text();
-        let columnNumber = $(this).attr("class")?.split(' ')[0].split('-')[2];
+        let columnNumber = $(this).attr('class')?.split(' ')[0].split('-')[2];
         let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().children().index($(this).parent()));
         if (!_this.validateInput(cellContent, Number(columnNumber), inventoryIndex)) {
           $(this).text(originalCellContent);
-          _this.openInvalidInputAlert();
+          _this.inventoryData[inventoryIndex].dbStatus = null;
+          _this.openErrorAlert('Invalid input. Please try again.');
           return;
         } 
         _this.updateInventoryData(inventoryIndex, Number(columnNumber), cellContent);
@@ -298,9 +312,12 @@ export class AppComponent {
     return regexCheck && uniqueCheck;
   }
 
-  openInvalidInputAlert() {
+  openErrorAlert(message: string) {
     this.ngZone.run(() => {
-      this.dialog.open(InvalidInputAlertComponent, {
+      this.dialog.open(ErrorAlertComponent, {
+        data: {
+          message: message
+        },
         width: '325px',
         height: '175px'
       });
@@ -357,12 +374,35 @@ export class AppComponent {
 
   addDeleteButtonHandlers() {
     let _this = this;
-    $(".delete-btn").off("click").click(function() {
+    $('.delete-btn').off('click').click(function() {
       let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().parent().parent().children().index($(this).parent().parent()));
-      _this.inventoryData.splice(inventoryIndex, 1);
+      let deletedCar = _this.inventoryData.splice(inventoryIndex, 1)[0];
+      if (deletedCar.dbStatus != 'add') {
+        _this.inventoryDataToDelete.push(deletedCar);
+      }
       _this.adjustPageIfEmpty();
       _this.generateTable();
     });
+  }
+
+  saveDataToDB() {
+    for (let i = 0; i < this.inventoryData.length; i++) {
+      if (!this.inventoryData[i].vin) {
+        this.openErrorAlert('VIN is required. Please try again.');
+        return false;
+      }
+      if (this.inventoryData[i].dbStatus == 'add') {
+        this.carService.addCar(this.inventoryData[i]);
+      } else if (this.inventoryData[i].dbStatus == 'update') {
+        this.carService.updateCar(this.inventoryData[i], this.inventoryData[i].vin as string);
+      }
+      this.inventoryData[i].dbStatus = null;
+    }
+    for (let i = 0; i < this.inventoryDataToDelete.length; i++) {
+      this.carService.deleteCar(this.inventoryDataToDelete[i].vin as string);
+    }
+    this.inventoryDataToDelete = new Array();
+    return true;
   }
 
   sort(columnNumber: number, isAscending: boolean) {
@@ -410,32 +450,32 @@ export class AppComponent {
   }
 
   highlightSortByColumn(columnNumber: number) {
-    document.querySelectorAll("th").forEach(function(header) {
-      $(header).removeClass("sort-by-header");
+    document.querySelectorAll('th').forEach(function(header) {
+      $(header).removeClass('sort-by-header');
     });
-    $("#column-header-" + columnNumber).addClass("sort-by-header");
-    document.querySelectorAll("td").forEach(function(cell) {
-      $(cell).removeClass("sort-by-cell");
+    $('#column-header-' + columnNumber).addClass('sort-by-header');
+    document.querySelectorAll('td').forEach(function(cell) {
+      $(cell).removeClass('sort-by-cell');
     });
-    document.querySelectorAll(".column-data-" + columnNumber).forEach(function(cell) {
-      $(cell).addClass("sort-by-cell");
+    document.querySelectorAll('.column-data-' + columnNumber).forEach(function(cell) {
+      $(cell).addClass('sort-by-cell');
     });
   }
 
   toggleSortIcon(_this: any) {
-    if ($(_this).find("i").hasClass("fa-sort")) {
-      document.querySelectorAll(".sort-icon").forEach(function(header) {
+    if ($(_this).find('i').hasClass('fa-sort')) {
+      document.querySelectorAll('.sort-icon').forEach(function(header) {
         $(header)
-          .addClass("fa-sort")
-          .removeClass("fa-sort-up")
-          .removeClass("fa-sort-down");
+          .addClass('fa-sort')
+          .removeClass('fa-sort-up')
+          .removeClass('fa-sort-down');
       });
-      $(_this).find("i").removeClass("fa-sort").addClass("fa-sort-up");
+      $(_this).find('i').removeClass('fa-sort').addClass('fa-sort-up');
     } else {
       $(_this)
-        .find("i")
-        .toggleClass("fa-sort-up")
-        .toggleClass("fa-sort-down");
+        .find('i')
+        .toggleClass('fa-sort-up')
+        .toggleClass('fa-sort-down');
     }
   }
 
@@ -465,19 +505,19 @@ export class AppComponent {
   }
 
   setSearchValue() {
-    this.searchValue = ($("#searchbar-field").val() as string).trim();
+    this.searchValue = ($('#searchbar-field').val() as string).trim();
   }
 
   updatePagination() {
-    $("#current-page").text(this.currentPage);
-    $("#rows-per-page-field").val(this.rowsPerPage);
-    $("#prev-page-btn").removeAttr("disabled");
-    $("#next-page-btn").removeAttr("disabled");
+    $('#current-page').text(this.currentPage);
+    $('#rows-per-page-field').val(this.rowsPerPage);
+    $('#prev-page-btn').removeAttr('disabled');
+    $('#next-page-btn').removeAttr('disabled');
     if (this.isPageOnBottomEdgeOfBounds()) {
-      $("#prev-page-btn").attr("disabled", "disabled");
+      $('#prev-page-btn').attr('disabled', 'disabled');
     }
     if (this.isPageOnTopEdgeOfBounds()) {
-      $("#next-page-btn").attr("disabled", "disabled");
+      $('#next-page-btn').attr('disabled', 'disabled');
     }
     this.setRowVisibilityByPage();
   }
@@ -502,7 +542,7 @@ export class AppComponent {
   }
 
   rowsPerPageInputHandler() {
-    let input = Number($("#rows-per-page-field").val());
+    let input = Number($('#rows-per-page-field').val());
     if (input > 0) {
       this.rowsPerPage = input;
       this.adjustPageIfEmpty();

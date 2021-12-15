@@ -43,7 +43,8 @@ app.post('/cars', (req, res) => {
 
         let vehicleTypeExistsQuery = `SELECT VEHICLE_TYPE_ID
             FROM VEHICLE_TYPE
-            WHERE BRAND = ${addQuotes(car.brand)} AND MODEL = ${addQuotes(car.model)};`
+            WHERE BRAND ${(car.brand == null) ? `IS NULL` : `= ${addQuotes(car.brand)}`}
+                AND MODEL ${(car.model == null) ? `IS NULL` : `= ${addQuotes(car.model)}`};`
         
         connection.query(vehicleTypeExistsQuery, function (err, rows, fields) {
             if (rows.length > 0) {
@@ -107,7 +108,8 @@ app.put('/cars/:vin', (req, res) => {
 
         let vehicleTypeExistsQuery = `SELECT VEHICLE_TYPE_ID
             FROM VEHICLE_TYPE
-            WHERE BRAND = ${addQuotes(car.brand)} AND MODEL = ${addQuotes(car.model)};`
+            WHERE BRAND ${(car.brand == null) ? `IS NULL` : `= ${addQuotes(car.brand)}`}
+                AND MODEL ${(car.model == null) ? `IS NULL` : `= ${addQuotes(car.model)}`};`
 
         connection.query(vehicleTypeExistsQuery, function (err, rows, fields) {
             if (rows.length > 0) { 

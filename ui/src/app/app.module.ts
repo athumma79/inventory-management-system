@@ -6,16 +6,18 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
-import { CarDetailsComponent } from './car-details/car-details.component';
-import { InvalidInputAlertComponent } from './invalid-input-alert/invalid-input-alert.component';
+import { CarImageComponent } from './car-image/car-image.component';
+import { ErrorAlertComponent } from './error-alert/error-alert.component';
 import { ImageURLPromptComponent } from './image-url-prompt/image-url-prompt.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarDetailsComponent,
-    InvalidInputAlertComponent,
-    ImageURLPromptComponent
+    CarImageComponent,
+    ErrorAlertComponent,
+    ImageURLPromptComponent,
+    ErrorAlertComponent,
+    CarImageComponent
   ],
   imports: [
     BrowserModule,
@@ -25,9 +27,11 @@ import { ImageURLPromptComponent } from './image-url-prompt/image-url-prompt.com
     MatDialogModule
   ],
   entryComponents: [
-    CarDetailsComponent
+    CarImageComponent
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
