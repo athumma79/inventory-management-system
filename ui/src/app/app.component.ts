@@ -43,38 +43,19 @@ export class AppComponent {
       });
 
       $('#edit-btn').click(function() {
-        $('#save-btn, .button-cell').removeClass('d-none');
-        $('#edit-btn').addClass('d-none');
-        $('table').removeClass('table-hover');
-        $('table').addClass('table-bordered');
-        _this.adjustHoverEffect();
-        $('td').attr({
-          contenteditable: 'true'
-        });
-        $('.column-data-0, .button-cell').attr({
-          contenteditable: 'false'
-        });
-        $('tbody tr').off('click');
+        _this.startEditing();
       });
 
       $('#save-btn').click(function() {
         if (!_this.saveDataToDB()) {
           return;
         }
-        $('#save-btn, .button-cell').addClass('d-none');
-        $('#edit-btn').removeClass('d-none');
-        $('table').addClass('table-hover');
-        $('table').removeClass('table-bordered');
-        _this.adjustHoverEffect();
-        $('td').attr({
-          contenteditable: 'false'
-        });
-        _this.addRowDetailsHandlers();
-        _this.setRowVisibilityBySearch();
-        if (_this.sortByColumnNumber) {
-          _this.sort(_this.sortByColumnNumber, $('#column-header-' + _this.sortByColumnNumber).find('i').hasClass('fa-sort-up'));
-        }
-        _this.generateTable();
+        _this.doneEditing();
+      });
+
+      $('#cancel-btn').click(function() {
+        _this.initializeTable();
+        _this.doneEditing();
       });
 
       $('th').click(function() {
@@ -150,6 +131,7 @@ export class AppComponent {
   }
 
   populateInventoryData(callback: Function) {
+    this.inventoryData = new Array();
     this.carService.getCars((data: any) => {
       for (let i = 0; i < data.cars.length; i++) {
         let newCar = new Car();
@@ -383,6 +365,39 @@ export class AppComponent {
       _this.adjustPageIfEmpty();
       _this.generateTable();
     });
+  }
+  
+  startEditing() {
+    $('#save-btn, #cancel-btn, .button-cell').removeClass('d-none');
+    $('#edit-btn').addClass('d-none');
+    $('table').removeClass('table-hover');
+    $('table').addClass('table-bordered');
+    this.adjustHoverEffect();
+    $('td').attr({
+      contenteditable: 'true'
+    });
+    $('.column-data-0, .button-cell').attr({
+      contenteditable: 'false'
+    });
+    $('tbody tr').off('click');
+  }
+
+  doneEditing() {
+    $('#save-btn, #cancel-btn, .button-cell').addClass('d-none');
+    $('#edit-btn').removeClass('d-none');
+    $('table').addClass('table-hover');
+    $('table').removeClass('table-bordered');
+    this.adjustHoverEffect();
+    $('td').attr({
+      contenteditable: 'false'
+    });
+    this.addRowDetailsHandlers();
+    this.setRowVisibilityBySearch();
+    if (this.sortByColumnNumber) {
+      this.sort(this.sortByColumnNumber, $('#column-header-' + this.sortByColumnNumber).find('i').hasClass('fa-sort-up'));
+    }
+    this.adjustPageIfEmpty();
+    this.generateTable();
   }
 
   saveDataToDB() {

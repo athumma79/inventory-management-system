@@ -132,8 +132,13 @@ tr.hover:hover td.sort-by-cell {
 }
 
 #edit-btn,
-#save-btn {
+#save-btn,
+#cancel-btn {
     width: 200px;
+}
+
+#save-btn {
+    margin-right: 25px;
 }
 
 #rows-per-page {
