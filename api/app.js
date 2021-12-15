@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
-const port = 3000
+
+var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+app.use(awsServerlessExpressMiddleware.eventContext())
 
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -11,7 +13,7 @@ app.use(cors())
 
 var mysql = require('mysql')
 var pool = mysql.createPool({
-  host: 'inventory-management-db.c1o9xrhwtmlz.us-east-1.rds.amazonaws.com',
+  host: 'inventory-management-db.c1o9xrhwtmlz.us-east-1.rds.amazonaws.com', 
   user: 'admin',
   password: 'rootroot',
   database: 'INVENTORY_MANAGEMENT_DB'
@@ -233,6 +235,4 @@ function formatInventoryData(data) {
     }
 }
 
-app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}`)
-})
+module.exports = app
