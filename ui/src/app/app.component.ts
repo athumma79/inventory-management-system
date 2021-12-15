@@ -371,6 +371,7 @@ export class AppComponent {
   startEditing() {
     $('#save-btn, #cancel-btn, .button-cell').removeClass('d-none');
     $('#edit-btn').addClass('d-none');
+    $('.button-container').addClass('button-container-editable');
     $('table').removeClass('table-hover');
     $('table').addClass('table-bordered');
     this.adjustHoverEffect();
@@ -386,6 +387,7 @@ export class AppComponent {
   doneEditing() {
     $('#save-btn, #cancel-btn, .button-cell').addClass('d-none');
     $('#edit-btn').removeClass('d-none');
+    $('.button-container').removeClass('button-container-editable');
     $('table').addClass('table-hover');
     $('table').removeClass('table-bordered');
     this.adjustHoverEffect();

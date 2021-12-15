@@ -109,8 +109,8 @@ tr.hover:hover td.sort-by-cell {
 }
 
 #table-controls {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    justify-content: space-between;
     margin-top: 5px;
     margin-bottom: 15px;
 }
@@ -128,17 +128,19 @@ tr.hover:hover td.sort-by-cell {
 }
 
 .button-container {
+    display: flex;
     text-align: center;
+}
+
+.button-container-editable {
+    justify-content: space-between;
+    width: 425px;
 }
 
 #edit-btn,
 #save-btn,
 #cancel-btn {
     width: 200px;
-}
-
-#save-btn {
-    margin-right: 25px;
 }
 
 #rows-per-page {
