@@ -4,11 +4,11 @@ import { ImageURLPromptComponent } from '../image-url-prompt/image-url-prompt.co
 import { CarService } from '../services/car.service';
 
 @Component({
-  selector: 'app-car-image',
-  templateUrl: './car-image.component.html',
-  styleUrls: ['./car-image.component.css'],
+  selector: 'app-car-image-modal',
+  templateUrl: './car-image-modal.component.html',
+  styleUrls: ['./car-image-modal.component.css'],
 })
-export class CarImageComponent implements OnInit {
+export class CarImageModalComponent implements OnInit {
 
   image: string;
   defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
@@ -17,7 +17,7 @@ export class CarImageComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<CarImageComponent>,
+    private dialogRef: MatDialogRef<CarImageModalComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { image: string, label: string, vin: string },
     private carService: CarService
   ) {

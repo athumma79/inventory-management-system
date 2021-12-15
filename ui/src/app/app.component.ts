@@ -4,7 +4,7 @@ import * as $ from 'jquery';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorAlertComponent } from './error-alert/error-alert.component';
-import { CarImageComponent } from './car-image/car-image.component';
+import { CarImageModalComponent } from './car-image-modal/car-image-modal.component';
 
 import { Car } from './models/car';
 import { CarService } from './services/car.service';
@@ -215,7 +215,7 @@ export class AppComponent {
       $('tbody tr').off('click').click(function() {
         let inventoryIndex = _this.getInventoryIndexOfRow($(this).parent().children().index($(this)));
         _this.ngZone.run(() => {
-          let dialogRef = _this.dialog.open(CarImageComponent, {
+          let dialogRef = _this.dialog.open(CarImageModalComponent, {
             data: {
               image: _this.inventoryData[inventoryIndex].image,
               label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : '') + ' ' + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : ''),
