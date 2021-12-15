@@ -58,7 +58,7 @@ curl -X POST -H "Content-Type: application/json" \
     $api/cars
 
 curl -X POST -H "Content-Type: application/json" \
-    -d '{ "image": "https://platform.cstatic-images.com/xlarge/in/v2/e2bdc9ae-f53a-55d2-8000-b29b4a593960/e05c2050-fc36-4ac3-913e-ac0976ba68b5/OSNVvo782j5RSVKADRkA6FpnMZw.jpg" }' \
+    -d '{ "image": "https://pictures.dealer.com/m/midwaydodgeiicllc/0186/486a0df130df261629208a2e3555d4afx.jpg" }' \
     $api/cars/1C4RDHDG0JC261436/image
 
 curl -X POST -H "Content-Type: application/json" \
