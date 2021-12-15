@@ -400,6 +400,7 @@ export class AppComponent {
       this.sort(this.sortByColumnNumber, $('#column-header-' + this.sortByColumnNumber).find('i').hasClass('fa-sort-up'));
     }
     this.adjustPageIfEmpty();
+    this.updatePagination();
     this.generateTable();
   }
 
