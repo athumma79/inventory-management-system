@@ -54,8 +54,9 @@ export class AppComponent {
       });
 
       $('#cancel-btn').click(function() {
-        _this.initializeTable();
-        _this.doneEditing();
+        _this.initializeTable(() => {
+          _this.doneEditing();
+        });
       });
 
       $('th').click(function() {
@@ -123,10 +124,11 @@ export class AppComponent {
     });
   }
 
-  initializeTable() {
+  initializeTable(callback: Function = (() => {})) {
     this.populateInventoryData(() => {
       this.loadHeadingIds();
       this.generateTable();
+      callback();
     });
   }
 
@@ -400,7 +402,6 @@ export class AppComponent {
       this.sort(this.sortByColumnNumber, $('#column-header-' + this.sortByColumnNumber).find('i').hasClass('fa-sort-up'));
     }
     this.adjustPageIfEmpty();
-    this.updatePagination();
     this.generateTable();
   }
 
