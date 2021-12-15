@@ -1,9 +1,6 @@
 #!/bin/bash
 
-api="http://localhost:3000"
-
-node ../api/app.js &
-sleep 0.5
+api="https://6dis2jltik.execute-api.us-east-1.amazonaws.com/default"
 
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "car": { "vin": "KNAFB1217Y5836917", "brand": "Acura", "model": "MDX", "color": "White", "year": "2008", "mileage": "65390", "price": "7495" } }' \
@@ -84,5 +81,3 @@ curl -X POST -H "Content-Type: application/json" \
 curl -X POST -H "Content-Type: application/json" \
     -d '{ "image": "https://media.ed.edmunds-media.com/mazda/cx-5/2017/oem/2017_mazda_cx-5_4dr-suv_grand-touring_fq_oem_1_1600.jpg" }' \
     $api/cars/JM3KFBCM2J0455300/image
-
-pgrep node | xargs kill

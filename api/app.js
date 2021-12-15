@@ -30,6 +30,7 @@ app.get('/cars', (req, res) => {
 
         connection.query(query, function (err, rows, fields) {
             if (err) throw err
+
             formatInventoryData(rows)
             res.json({cars: rows})
             connection.release()
@@ -49,6 +50,8 @@ app.post('/cars', (req, res) => {
                 AND MODEL ${(car.model == null) ? `IS NULL` : `= ${addQuotes(car.model)}`};`
         
         connection.query(vehicleTypeExistsQuery, function (err, rows, fields) {
+            if (err) throw err
+
             if (rows.length > 0) {
                 let vehicleQuery = `INSERT INTO VEHICLE (VIN, VEHICLE_TYPE_ID, COLOR, YEAR, MILEAGE)
                     VALUES (${addQuotes(car.vin)}, ${addQuotes(rows[0]["VEHICLE_TYPE_ID"])}, ${addQuotes(car.color)}, ${addQuotes(car.year)}, ${addQuotes(car.mileage)})`
@@ -114,6 +117,8 @@ app.put('/cars/:vin', (req, res) => {
                 AND MODEL ${(car.model == null) ? `IS NULL` : `= ${addQuotes(car.model)}`};`
 
         connection.query(vehicleTypeExistsQuery, function (err, rows, fields) {
+            if (err) throw err
+
             if (rows.length > 0) { 
                 let vehicleQuery = `UPDATE VEHICLE
                     SET VEHICLE_TYPE_ID = ${addQuotes(rows[0]["VEHICLE_TYPE_ID"])}, COLOR = ${addQuotes(car.color)}, YEAR = ${addQuotes(car.year)}, MILEAGE = ${addQuotes(car.mileage)}
@@ -211,6 +216,7 @@ app.post('/cars/:vin/image', (req, res) => {
 
         connection.query(query, function (err, rows, fields) {
             if (err) throw err
+
             res.json("success")
             connection.release()
         })
