@@ -11,8 +11,8 @@ app.use(cors())
 
 var mysql = require('mysql')
 var pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
+  host: 'inventory-management-db.c1o9xrhwtmlz.us-east-1.rds.amazonaws.com',
+  user: 'admin',
   password: 'rootroot',
   database: 'INVENTORY_MANAGEMENT_DB'
 })
