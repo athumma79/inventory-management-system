@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ImageURLPromptComponent } from '../image-url-prompt/image-url-prompt.component';
+import { CarService } from '../services/car.service';
 
 @Component({
   selector: 'app-car-image',
@@ -12,16 +13,19 @@ export class CarImageComponent implements OnInit {
   image: string;
   defaultImage: string = "https://lasd.lv/public/assets/no-image.png";
   label: string;
+  vin: string;
 
   constructor(
-    public dialog: MatDialog,
-    public dialogRef: MatDialogRef<CarImageComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { image: string, label: string }
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<CarImageComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: { image: string, label: string, vin: string },
+    private carService: CarService
   ) {
     this.image = data.image ? data.image : this.defaultImage;
     this.label = data.label.trim().length > 0 ? data.label.trim() : "Car";
+    this.vin = data.vin;
     dialogRef.beforeClosed().subscribe(() => {
-      dialogRef.close(this.getImageToPass());
+      dialogRef.close(this.getImageToPass(null));
     });
   }
 
@@ -29,7 +33,7 @@ export class CarImageComponent implements OnInit {
 
   editImage() {
     let dialogRef = this.dialog.open(ImageURLPromptComponent, {
-      data: { image: this.getImageToPass() },
+      data: { image: this.getImageToPass("") },
       width: '450px'
     });
     dialogRef.afterClosed().subscribe((url) => {
@@ -44,6 +48,7 @@ export class CarImageComponent implements OnInit {
   setImage(url: string = this.defaultImage) {
     this.isImageValid(url, (isValid: boolean) => {
       this.image = isValid ? url : this.defaultImage;
+      this.carService.updateCarImage(this.vin, this.getImageToPass(null));
     });
   }
 
@@ -58,8 +63,8 @@ export class CarImageComponent implements OnInit {
     image.src = url;
   }
 
-  getImageToPass() {
-    return (this.image != this.defaultImage) ? this.image : "";
+  getImageToPass(noImage: string | null) {
+    return (this.image != this.defaultImage) ? this.image : noImage;
   }
 
 }

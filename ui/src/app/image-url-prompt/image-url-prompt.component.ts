@@ -12,8 +12,8 @@ export class ImageURLPromptComponent implements OnInit {
   url: string;
 
   constructor(
-    public dialogRef: MatDialogRef<ImageURLPromptComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { image: string }
+    private dialogRef: MatDialogRef<ImageURLPromptComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: { image: string }
   ) {
     this.url = data.image;
     dialogRef.beforeClosed().subscribe(() => {

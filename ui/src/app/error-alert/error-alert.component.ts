@@ -10,7 +10,7 @@ export class ErrorAlertComponent implements OnInit {
 
   message: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string }) { 
+  constructor(@Inject(MAT_DIALOG_DATA) private data: { message: string }) { 
     this.message = data.message;
   }
 

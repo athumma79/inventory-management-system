@@ -27,4 +27,8 @@ export class CarService {
   deleteCar(vin: string) {
     this.httpClient.delete(environment.api + '/cars/' + vin).subscribe();
   }
+
+  updateCarImage(vin: string, image: string | null) {
+    this.httpClient.post(environment.api + '/cars/' + vin + '/image', { "image": image }).subscribe();
+  }
 }

@@ -218,12 +218,13 @@ export class AppComponent {
           let dialogRef = _this.dialog.open(CarImageComponent, {
             data: {
               image: _this.inventoryData[inventoryIndex].image,
-              label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : '') + ' ' + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : '') 
+              label: (_this.inventoryData[inventoryIndex].brand ? _this.inventoryData[inventoryIndex].brand : '') + ' ' + (_this.inventoryData[inventoryIndex].model ? _this.inventoryData[inventoryIndex].model : ''),
+              vin: _this.inventoryData[inventoryIndex].vin 
             },
             width: '50%'
           });
           dialogRef.afterClosed().subscribe((image) => {
-            _this.inventoryData[inventoryIndex].image = image ? image : null;
+            _this.inventoryData[inventoryIndex].image = image;
           });
         });
       })

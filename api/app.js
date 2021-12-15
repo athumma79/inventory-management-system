@@ -196,24 +196,6 @@ app.delete('/cars/:vin', (req, res) => {
     })
 })
 
-app.get('/cars/:vin/image', (req, res) => {
-    let vin = req.params.vin
-
-    pool.getConnection(function (err, connection) {
-        if (err) throw err
-
-        let query = `SELECT IMAGE
-            FROM VEHICLE
-            WHERE VIN = ${addQuotes(vin)};`
-
-        connection.query(query, function (err, rows, fields) {
-            if (err) throw err
-            res.json({image: rows[0]["IMAGE"]})
-            connection.release()
-        })
-    })
-})
-
 app.post('/cars/:vin/image', (req, res) => {
     let vin = req.params.vin
     let image = req.body.image
